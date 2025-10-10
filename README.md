@@ -1,94 +1,131 @@
-# 10x Astro Starter
+# 10xDevs Flashcards
 
-A modern, opinionated starter template for building fast, accessible, and AI-friendly web applications.
+[![Version](https://img.shields.io/badge/version-0.0.1-blue)](https://github.com/your-org/10xdevs-project) [![License: MIT](https://img.shields.io/badge/license-MIT-green)]
+
+> A web application for quickly creating and learning flashcards using a simple spaced-repetition system and AI-assisted card generation.
+
+## Table of Contents
+
+1. [Tech Stack](#tech-stack)  
+2. [Getting Started](#getting-started)  
+3. [Available Scripts](#available-scripts)  
+4. [Project Scope](#project-scope)  
+   - [In Scope](#in-scope)  
+   - [Out of Scope](#out-of-scope)  
+5. [Project Status](#project-status)  
+6. [License](#license)  
+
+---
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
-- [React](https://react.dev/) v19.0.0 - UI library for building interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4.0.17 - Utility-first CSS framework
+- **Frontend**  
+  - Astro 5.13.7  
+  - React 19.1.1  
+  - TypeScript 5  
+  - Tailwind CSS 4.1.13  
+  - Shadcn/UI (Radix) & Lucide-React  
 
-## Prerequisites
+- **Backend & Services**  
+  - Supabase (Auth, Postgres, RLS, Edge Functions)  
+  - OpenRouter (AI generation)  
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
+- **Tooling**  
+  - Node.js v22.14.0  
+  - ESLint & Prettier (with Husky + lint-staged)  
+  - GitHub Actions (CI)  
+
+---
 
 ## Getting Started
 
-1. Clone the repository:
+### Prerequisites
+
+- Node.js (v22.14.0)
+- npm (>=8.x) or yarn
+- [nvm](https://github.com/nvm-sh/nvm) (optional, to pin Node version)
+
+### Installation
 
 ```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
+git clone https://github.com/your-org/10xdevs-project.git
+cd 10xdevs-project
+nvm use           # if you use nvm
+npm install       # or yarn install
 ```
 
-2. Install dependencies:
-
-```bash
-npm install
-```
-
-3. Run the development server:
+### Development
 
 ```bash
 npm run dev
 ```
 
-4. Build for production:
+Open your browser at `http://localhost:3000` to view the app.
 
-```bash
-npm run build
-```
+---
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
+In the project directory, you can run:
 
-## Project Structure
+- `npm run dev`  
+  Starts the development server with hot-reloading.
 
-```md
-.
-├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
-```
+- `npm run build`  
+  Builds the static site for production.
 
-## AI Development Support
+- `npm run preview`  
+  Serves the production build locally.
 
-This project is configured with AI development tools to enhance the development experience, providing guidelines for:
+- `npm run astro`  
+  Shortcut to run any `astro` CLI command.
 
-- Project structure
-- Coding practices
-- Frontend development
-- Styling with Tailwind
-- Accessibility best practices
-- Astro and React guidelines
+- `npm run lint`  
+  Runs ESLint to analyze code quality.
 
-### Cursor IDE
+- `npm run lint:fix`  
+  Runs ESLint and auto-fixes issues.
 
-The project includes AI rules in `.cursor/rules/` directory that help Cursor IDE understand the project structure and provide better code suggestions.
+- `npm run format`  
+  Formats code with Prettier.
 
-### GitHub Copilot
+---
 
-AI instructions for GitHub Copilot are available in `.github/copilot-instructions.md`
+## Project Scope
 
-### Windsurf
+### In Scope
 
-The `.windsurfrules` file contains AI configuration for Windsurf.
+- Web-only (desktop & mobile responsive)
+- AI-assisted card generation from free-text topic (10–20 candidates)
+- Candidate management (accept/edit/reject, bulk accept)
+- Simple SRS session (3 ratings: hard, normal, easy; fixed intervals)
+- Basic Markdown support with character limits (front ≤200, back ≤350)
+- Deck & card CRUD (inline edit, duplicate warnings)
+- Search & listing of decks/cards
+- Analytics events for key user actions
 
-## Contributing
+### Out of Scope (MVP)
 
-Please follow the AI guidelines and coding practices defined in the AI configuration files when contributing to this project.
+- Advanced import/export (APKG, Anki/Notion/Quizlet)
+- Offline mode or push notifications
+- Complex SRS algorithms (FSRS, SM-2 tuning)
+- Collaboration, sharing, tagging
+- Native mobile apps
+
+---
+
+## Project Status
+
+🚧 MVP under active development  
+- Core flashcard flows implemented  
+- AI generation & candidate review in progress  
+- SRS session & analytics upcoming  
+
+Contributions and feedback are welcome!
+
+---
 
 ## License
 
-MIT
+This project is licensed under the MIT License.  
+See [LICENSE](LICENSE) for details.
