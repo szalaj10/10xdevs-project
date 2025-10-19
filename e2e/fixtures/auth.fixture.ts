@@ -18,34 +18,34 @@ interface AuthFixtures {
   authenticatedPage: unknown;
 }
 
-type UseFixture<T> = (fixture: T) => Promise<void>;
+type FixtureFunction<T> = (fixture: T) => Promise<void>;
 
 export const test = base.extend<AuthFixtures>({
-  loginPage: async ({ page }: { page: Page }, useFixture: UseFixture<LoginPage>) => {
-    await useFixture(new LoginPage(page));
+  loginPage: async ({ page }: { page: Page }, run: FixtureFunction<LoginPage>) => {
+    await run(new LoginPage(page));
   },
-  signupPage: async ({ page }: { page: Page }, useFixture: UseFixture<SignupPage>) => {
-    await useFixture(new SignupPage(page));
+  signupPage: async ({ page }: { page: Page }, run: FixtureFunction<SignupPage>) => {
+    await run(new SignupPage(page));
   },
-  homePage: async ({ page }: { page: Page }, useFixture: UseFixture<HomePage>) => {
-    await useFixture(new HomePage(page));
+  homePage: async ({ page }: { page: Page }, run: FixtureFunction<HomePage>) => {
+    await run(new HomePage(page));
   },
-  generatePage: async ({ page }: { page: Page }, useFixture: UseFixture<GeneratePage>) => {
-    await useFixture(new GeneratePage(page));
+  generatePage: async ({ page }: { page: Page }, run: FixtureFunction<GeneratePage>) => {
+    await run(new GeneratePage(page));
   },
-  flashcardsPage: async ({ page }: { page: Page }, useFixture: UseFixture<FlashcardsPage>) => {
-    await useFixture(new FlashcardsPage(page));
+  flashcardsPage: async ({ page }: { page: Page }, run: FixtureFunction<FlashcardsPage>) => {
+    await run(new FlashcardsPage(page));
   },
-  sessionsPage: async ({ page }: { page: Page }, useFixture: UseFixture<SessionsPage>) => {
-    await useFixture(new SessionsPage(page));
+  sessionsPage: async ({ page }: { page: Page }, run: FixtureFunction<SessionsPage>) => {
+    await run(new SessionsPage(page));
   },
-  navBar: async ({ page }: { page: Page }, useFixture: UseFixture<NavBarPage>) => {
-    await useFixture(new NavBarPage(page));
+  navBar: async ({ page }: { page: Page }, run: FixtureFunction<NavBarPage>) => {
+    await run(new NavBarPage(page));
   },
 
   authenticatedPage: async (
     { page, context }: { page: Page; context: BrowserContext },
-    useFixture: UseFixture<unknown>
+    run: FixtureFunction<unknown>
   ) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
@@ -76,7 +76,7 @@ export const test = base.extend<AuthFixtures>({
     }
 
     await page.waitForTimeout(1000);
-    await useFixture(undefined);
+    await run(undefined);
   },
 });
 

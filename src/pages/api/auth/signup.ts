@@ -6,25 +6,22 @@ export const prerender = false;
 // Validation schema for signup request
 const signupSchema = z.object({
   email: z.string().email("Nieprawidłowy format adresu e-mail"),
-  password: z
-    .string()
-    .min(8, "Hasło musi mieć co najmniej 8 znaków")
-    .max(72, "Hasło może mieć maksymalnie 72 znaki"),
+  password: z.string().min(8, "Hasło musi mieć co najmniej 8 znaków").max(72, "Hasło może mieć maksymalnie 72 znaki"),
 });
 
 /**
  * POST /api/auth/signup
  * Registers a new user with email and password
- * 
+ *
  * Request body:
  * - email: string (valid email format)
  * - password: string (min 8 characters)
- * 
+ *
  * Returns:
  * - 201: User created successfully (email verification required)
  * - 400: Validation error or user already exists
  * - 500: Internal server error
- * 
+ *
  * Note: Supabase will send a confirmation email to the user.
  * The user must verify their email before they can log in.
  */
@@ -140,5 +137,3 @@ export const POST: APIRoute = async ({ request, locals }) => {
     );
   }
 };
-
-

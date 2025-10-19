@@ -73,9 +73,7 @@ export default function ResetPasswordConfirmPage() {
       <div className="min-h-screen flex items-center justify-center bg-background px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">
-              Resetowanie hasła
-            </h2>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">Resetowanie hasła</h2>
           </div>
 
           <Alert variant="destructive" role="alert">
@@ -97,9 +95,7 @@ export default function ResetPasswordConfirmPage() {
       <div className="min-h-screen flex items-center justify-center bg-background px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">
-              Hasło zaktualizowane
-            </h2>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">Hasło zaktualizowane</h2>
           </div>
 
           <Alert role="status">
@@ -122,12 +118,8 @@ export default function ResetPasswordConfirmPage() {
     <div className="min-h-screen flex items-center justify-center bg-background px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">
-            Ustaw nowe hasło
-          </h2>
-          <p className="mt-2 text-center text-sm text-muted-foreground">
-            Wprowadź nowe hasło dla swojego konta
-          </p>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">Ustaw nowe hasło</h2>
+          <p className="mt-2 text-center text-sm text-muted-foreground">Wprowadź nowe hasło dla swojego konta</p>
         </div>
 
         {error && (
@@ -170,16 +162,12 @@ export default function ResetPasswordConfirmPage() {
                 onBlur={() => setTouched({ ...touched, confirmNewPassword: true })}
                 className="mt-1"
                 aria-invalid={
-                  touched.confirmNewPassword &&
-                  confirmNewPassword.length > 0 &&
-                  newPassword !== confirmNewPassword
+                  touched.confirmNewPassword && confirmNewPassword.length > 0 && newPassword !== confirmNewPassword
                 }
               />
-              {touched.confirmNewPassword &&
-                confirmNewPassword.length > 0 &&
-                newPassword !== confirmNewPassword && (
-                  <p className="text-sm text-destructive mt-1">Hasła nie są identyczne</p>
-                )}
+              {touched.confirmNewPassword && confirmNewPassword.length > 0 && newPassword !== confirmNewPassword && (
+                <p className="text-sm text-destructive mt-1">Hasła nie są identyczne</p>
+              )}
             </div>
           </div>
 

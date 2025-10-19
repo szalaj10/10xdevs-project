@@ -226,7 +226,7 @@ export async function createSessionItem(
   rating: -1 | 0 | 1
 ): Promise<SessionItemDTO> {
   // Step 1: Verify session belongs to user
-  const { data: session, error: sessionError } = await supabase
+  const { error: sessionError } = await supabase
     .from("sessions")
     .select("id")
     .eq("id", sessionId)

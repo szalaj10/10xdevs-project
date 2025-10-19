@@ -26,11 +26,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
     }
 
     // Clear all Supabase-related cookies
-    const cookieNames = [
-      "sb-access-token",
-      "sb-refresh-token",
-      "sb-auth-token",
-    ];
+    const cookieNames = ["sb-access-token", "sb-refresh-token", "sb-auth-token"];
 
     cookieNames.forEach((name) => {
       cookies.delete(name, { path: "/" });
@@ -51,4 +47,3 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
     );
   }
 };
-

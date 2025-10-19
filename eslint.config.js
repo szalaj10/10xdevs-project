@@ -63,11 +63,32 @@ export default tseslint.config(
   reactConfig,
   eslintPluginAstro.configs["flat/recommended"],
   eslintPluginPrettier,
+  // Ignore files with parsing issues
+  {
+    ignores: ["src/db/database.types.ts", "src/layouts/Layout.astro"],
+  },
   // Allow console statements in example files
   {
     files: ["examples/**/*.{js,ts}"],
     rules: {
       "no-console": "off",
+    },
+  },
+  // Relax strict rules for test files and generated types
+  {
+    files: ["tests/**/*.ts", "src/db/database.types.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-useless-constructor": "off",
+      "@typescript-eslint/no-empty-function": "off",
+    },
+  },
+  // Relax strict rules for hooks and components (gradual migration)
+  {
+    files: ["src/lib/hooks/**/*.ts", "src/components/**/*.tsx"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-non-null-assertion": "warn",
     },
   }
 );

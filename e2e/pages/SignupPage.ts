@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 /**
  * Page Object Model for Signup Page
@@ -16,20 +16,20 @@ export class SignupPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.emailInput = page.getByTestId('signup-email-input');
-    this.passwordInput = page.getByTestId('signup-password-input');
-    this.confirmPasswordInput = page.getByTestId('signup-confirm-password-input');
-    this.signUpButton = page.getByTestId('signup-submit-button');
-    this.switchToLoginButton = page.getByTestId('signup-switch-to-login');
-    this.errorMessage = page.getByTestId('signup-error');
-    this.successMessage = page.getByTestId('signup-success');
+    this.emailInput = page.getByTestId("signup-email-input");
+    this.passwordInput = page.getByTestId("signup-password-input");
+    this.confirmPasswordInput = page.getByTestId("signup-confirm-password-input");
+    this.signUpButton = page.getByTestId("signup-submit-button");
+    this.switchToLoginButton = page.getByTestId("signup-switch-to-login");
+    this.errorMessage = page.getByTestId("signup-error");
+    this.successMessage = page.getByTestId("signup-success");
   }
 
   /**
    * Navigate to signup page
    */
   async goto() {
-    await this.page.goto('/signup');
+    await this.page.goto("/signup");
   }
 
   /**
@@ -53,7 +53,7 @@ export class SignupPage {
    * Get error message text
    */
   async getErrorMessage(): Promise<string> {
-    return await this.errorMessage.textContent() || '';
+    return (await this.errorMessage.textContent()) || "";
   }
 
   /**
@@ -67,7 +67,7 @@ export class SignupPage {
    * Get success message text
    */
   async getSuccessMessage(): Promise<string> {
-    return await this.successMessage.textContent() || '';
+    return (await this.successMessage.textContent()) || "";
   }
 
   /**
@@ -77,4 +77,3 @@ export class SignupPage {
     await this.switchToLoginButton.click();
   }
 }
-

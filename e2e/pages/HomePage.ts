@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 /**
  * Page Object Model for Home Page
@@ -15,19 +15,19 @@ export class HomePage {
 
   constructor(page: Page) {
     this.page = page;
-    this.welcomeHeading = page.getByRole('heading', { name: /welcome/i });
-    this.generateButton = page.getByRole('button', { name: /generate/i });
-    this.flashcardsLink = page.getByRole('link', { name: /flashcards/i });
-    this.sessionsLink = page.getByRole('link', { name: /sessions/i });
-    this.userMenu = page.getByRole('button', { name: /user menu/i });
-    this.logoutButton = page.getByRole('button', { name: /logout/i });
+    this.welcomeHeading = page.getByRole("heading", { name: /welcome/i });
+    this.generateButton = page.getByRole("button", { name: /generate/i });
+    this.flashcardsLink = page.getByRole("link", { name: /flashcards/i });
+    this.sessionsLink = page.getByRole("link", { name: /sessions/i });
+    this.userMenu = page.getByRole("button", { name: /user menu/i });
+    this.logoutButton = page.getByRole("button", { name: /logout/i });
   }
 
   /**
    * Navigate to home page
    */
   async goto() {
-    await this.page.goto('/');
+    await this.page.goto("/");
   }
 
   /**
@@ -66,5 +66,3 @@ export class HomePage {
     await this.logoutButton.click();
   }
 }
-
-

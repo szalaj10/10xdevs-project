@@ -1,12 +1,6 @@
 import type { APIRoute } from "astro";
 import { rejectCandidate } from "../../../../../../lib/services/candidateService";
-import {
-  requireAuth,
-  parseNumericId,
-  errorResponse,
-  jsonResponse,
-  handleError,
-} from "../../../../../../lib/apiHelpers";
+import { requireAuth, parseNumericId, jsonResponse, handleError } from "../../../../../../lib/apiHelpers";
 
 export const prerender = false;
 

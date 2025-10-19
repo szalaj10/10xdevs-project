@@ -10,10 +10,9 @@ export const prerender = false;
     <SignupForm
       client:load
       onSwitchToLogin={() => {
+        // eslint-disable-next-line no-undef
         window.location.href = "/login";
       }}
     />
   </div>
 </Layout>
-
-

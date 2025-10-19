@@ -61,8 +61,8 @@ export default defineConfig({
     timeout: 120 * 1000,
     env: {
       // Pass test env vars to the dev server
-      PUBLIC_SUPABASE_URL: process.env.SUPABASE_URL || "",
-      PUBLIC_SUPABASE_KEY: process.env.SUPABASE_PUBLIC_KEY || "",
+      PUBLIC_SUPABASE_URL: process.env.PUBLIC_SUPABASE_URL || "",
+      PUBLIC_SUPABASE_KEY: process.env.PUBLIC_SUPABASE_KEY || "",
       GROQ_API_KEY: process.env.GROQ_API_KEY || "",
       GROQ_MODEL: process.env.GROQ_MODEL || "",
       GROQ_BASE_URL: process.env.GROQ_BASE_URL || "",

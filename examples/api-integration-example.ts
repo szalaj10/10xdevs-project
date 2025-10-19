@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /**
  * Example: Integrating GroqService with Astro API Routes
  *
@@ -243,20 +242,25 @@ Requirements:
  * Body: { topic: string, maxRetries?: number }
  */
 export const POST_WITH_RETRY: APIRoute = async ({ request }) => {
-  const { topic, maxRetries = 3 } = await request.json();
+  const { maxRetries = 3 } = await request.json();
 
   let lastError: Error | undefined;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       // Reuse the main POST logic
-      const result = await POST({ request } as any);
+      const result = await POST({ request } as Parameters<typeof POST>[0]);
       return result;
     } catch (error) {
       lastError = error as Error;
 
       // Only retry on transient errors
-      if (error instanceof RateLimitError || error instanceof NetworkError || (error as any).statusCode >= 500) {
+      if (
+        error instanceof RateLimitError ||
+        error instanceof NetworkError ||
+        ((error as Error & { statusCode?: number }).statusCode !== undefined &&
+          (error as Error & { statusCode: number }).statusCode >= 500)
+      ) {
         if (attempt < maxRetries) {
           const delay = Math.pow(2, attempt - 1) * 1000;
           console.log(`[Retry] Attempt ${attempt}/${maxRetries}, waiting ${delay}ms`);
@@ -291,9 +295,7 @@ export const POST_WITH_RETRY: APIRoute = async ({ request }) => {
  * in the future, which would allow real-time flashcard generation.
  */
 export const POST_STREAM: APIRoute = async ({ request }) => {
-  const { topic } = await request.json();
-
   // This would require streaming support from Groq SDK
   // For now, we return regular response
-  return POST({ request } as any);
+  return POST({ request } as Parameters<typeof POST>[0]);
 };

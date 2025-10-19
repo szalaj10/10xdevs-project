@@ -1,6 +1,6 @@
-import { expect, afterEach, vi } from 'vitest';
-import { cleanup } from '@testing-library/react';
-import '@testing-library/jest-dom/vitest';
+import { expect, afterEach, vi } from "vitest";
+import { cleanup } from "@testing-library/react";
+import "@testing-library/jest-dom/vitest";
 
 // Cleanup after each test case (e.g. clearing jsdom)
 afterEach(() => {
@@ -8,11 +8,11 @@ afterEach(() => {
 });
 
 // Mock environment variables
-vi.stubEnv('PUBLIC_SUPABASE_URL', 'http://127.0.0.1:54321');
-vi.stubEnv('PUBLIC_SUPABASE_KEY', 'test-anon-key');
+vi.stubEnv("PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321");
+vi.stubEnv("PUBLIC_SUPABASE_KEY", "test-anon-key");
 
 // Mock window.matchMedia
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: vi.fn().mockImplementation((query) => ({
     matches: false,
@@ -28,26 +28,40 @@ Object.defineProperty(window, 'matchMedia', {
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
+  constructor() {
+    // Mock constructor
+  }
+  disconnect() {
+    // Mock method
+  }
+  observe() {
+    // Mock method
+  }
   takeRecords() {
     return [];
   }
-  unobserve() {}
-} as any;
+  unobserve() {
+    // Mock method
+  }
+} as unknown as typeof IntersectionObserver;
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
-} as any;
+  constructor() {
+    // Mock constructor
+  }
+  disconnect() {
+    // Mock method
+  }
+  observe() {
+    // Mock method
+  }
+  unobserve() {
+    // Mock method
+  }
+} as unknown as typeof ResizeObserver;
 
 // Extend expect with custom matchers if needed
 expect.extend({
   // Add custom matchers here if needed
 });
-
-

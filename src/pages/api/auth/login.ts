@@ -12,17 +12,17 @@ const loginSchema = z.object({
 /**
  * POST /api/auth/login
  * Authenticates a user with email and password
- * 
+ *
  * Request body:
  * - email: string (valid email format)
  * - password: string
- * 
+ *
  * Returns:
  * - 200: Login successful
  * - 400: Invalid credentials or validation error
  * - 500: Internal server error
  */
-export const POST: APIRoute = async ({ request, locals, cookies }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     // Parse and validate request body
     const body = await request.json();
@@ -126,5 +126,3 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
     );
   }
 };
-
-

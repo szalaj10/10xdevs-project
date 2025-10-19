@@ -61,8 +61,11 @@ export const CandidateCard = memo(
                 {candidate.status === "rejected" && "❌ "}
                 {isEditing ? (
                   <div className="space-y-2">
-                    <label className="text-sm font-normal text-muted-foreground">Pytanie:</label>
+                    <label htmlFor={`front-${candidate.id}`} className="text-sm font-normal text-muted-foreground">
+                      Pytanie:
+                    </label>
                     <textarea
+                      id={`front-${candidate.id}`}
                       className="w-full p-2 border rounded-md"
                       value={editedFront}
                       onChange={(e) => onUpdateField("front", e.target.value)}
@@ -77,8 +80,11 @@ export const CandidateCard = memo(
               <CardContent className="px-0">
                 {isEditing ? (
                   <div className="space-y-2">
-                    <label className="text-sm font-normal text-muted-foreground">Odpowiedź:</label>
+                    <label htmlFor={`back-${candidate.id}`} className="text-sm font-normal text-muted-foreground">
+                      Odpowiedź:
+                    </label>
                     <textarea
+                      id={`back-${candidate.id}`}
                       className="w-full p-2 border rounded-md"
                       value={editedBack}
                       onChange={(e) => onUpdateField("back", e.target.value)}

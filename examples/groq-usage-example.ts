@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /**
  * Example usage of GroqService for flashcard generation
  *
@@ -126,7 +125,11 @@ async function generateFlashcardsWithRetry(topic: string, maxRetries = 3): Promi
       lastError = error as Error;
 
       // Only retry on rate limit or server errors
-      if (error instanceof RateLimitError || (error as any).statusCode >= 500) {
+      if (
+        error instanceof RateLimitError ||
+        ((error as Error & { statusCode?: number }).statusCode !== undefined &&
+          (error as Error & { statusCode: number }).statusCode >= 500)
+      ) {
         if (attempt < maxRetries) {
           const delay = Math.pow(2, attempt - 1) * 1000; // Exponential backoff
           console.log(`Retrying in ${delay}ms...`);

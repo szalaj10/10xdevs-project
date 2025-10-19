@@ -44,7 +44,7 @@ export const POST: APIRoute = async (context) => {
     // Use service role client to bypass RLS when testing without auth
     try {
       supabase = createSupabaseServiceClient();
-    } catch (error) {
+    } catch {
       return new Response(
         JSON.stringify({
           error:

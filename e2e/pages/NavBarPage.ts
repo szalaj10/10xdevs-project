@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 /**
  * Page Object Model for Navigation Bar
@@ -20,17 +20,17 @@ export class NavBarPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.navbar = page.getByTestId('navbar');
-    this.logo = page.getByTestId('navbar-logo');
-    this.homeLink = page.getByTestId('navbar-link--');
-    this.flashcardsLink = page.getByTestId('navbar-link--flashcards');
-    this.sessionsLink = page.getByTestId('navbar-link--sessions');
-    this.generateLink = page.getByTestId('navbar-link--generate-new');
-    this.userEmail = page.getByTestId('navbar-user-email');
-    this.themeToggle = page.getByTestId('navbar-theme-toggle');
-    this.loginButton = page.getByTestId('navbar-login-button');
-    this.logoutButton = page.getByTestId('navbar-logout-button');
-    this.mobileMenuButton = page.getByTestId('navbar-mobile-menu-button');
+    this.navbar = page.getByTestId("navbar");
+    this.logo = page.getByTestId("navbar-logo");
+    this.homeLink = page.getByTestId("navbar-link--");
+    this.flashcardsLink = page.getByTestId("navbar-link--flashcards");
+    this.sessionsLink = page.getByTestId("navbar-link--sessions");
+    this.generateLink = page.getByTestId("navbar-link--generate-new");
+    this.userEmail = page.getByTestId("navbar-user-email");
+    this.themeToggle = page.getByTestId("navbar-theme-toggle");
+    this.loginButton = page.getByTestId("navbar-login-button");
+    this.logoutButton = page.getByTestId("navbar-logout-button");
+    this.mobileMenuButton = page.getByTestId("navbar-mobile-menu-button");
   }
 
   /**
@@ -93,7 +93,7 @@ export class NavBarPage {
    * Get logged in user email
    */
   async getUserEmail(): Promise<string> {
-    return await this.userEmail.textContent() || '';
+    return (await this.userEmail.textContent()) || "";
   }
 
   /**
@@ -103,4 +103,3 @@ export class NavBarPage {
     await this.mobileMenuButton.click();
   }
 }
-

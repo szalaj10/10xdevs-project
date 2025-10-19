@@ -83,7 +83,9 @@ export default function HomePage() {
       )}
 
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground" data-testid="home-welcome-heading">Witaj{userName ? `, ${userName}` : ""}! 👋</h1>
+        <h1 className="text-3xl font-bold text-foreground" data-testid="home-welcome-heading">
+          Witaj{userName ? `, ${userName}` : ""}! 👋
+        </h1>
         <p className="text-muted-foreground mt-2">{formatDate(new Date())}</p>
       </div>
 
@@ -137,9 +139,13 @@ function ActionCard({
   badge?: number;
   onClick: () => void;
 }) {
-  const testId = title.toLowerCase().replace(/\s+/g, '-');
+  const testId = title.toLowerCase().replace(/\s+/g, "-");
   return (
-    <Card className="cursor-pointer hover:shadow-lg transition-shadow relative" onClick={onClick} data-testid={`home-action-${testId}`}>
+    <Card
+      className="cursor-pointer hover:shadow-lg transition-shadow relative"
+      onClick={onClick}
+      data-testid={`home-action-${testId}`}
+    >
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="text-4xl">{icon}</div>
@@ -167,7 +173,7 @@ function StatCard({
   icon: string;
   highlight?: boolean;
 }) {
-  const testId = label.toLowerCase().replace(/\s+/g, '-');
+  const testId = label.toLowerCase().replace(/\s+/g, "-");
   return (
     <Card className={highlight ? "border-primary" : ""} data-testid={`home-stat-${testId}`}>
       <CardContent className="pt-6">
@@ -192,8 +198,14 @@ function EmptyState() {
         Zacznij od wygenerowania pierwszych fiszek z pomocą AI lub dodaj je ręcznie.
       </p>
       <div className="flex gap-4">
-        <Button onClick={() => (window.location.href = "/generate/new")} data-testid="home-empty-generate-button">Wygeneruj fiszki AI</Button>
-        <Button variant="outline" onClick={() => (window.location.href = "/flashcards")} data-testid="home-empty-manual-button">
+        <Button onClick={() => (window.location.href = "/generate/new")} data-testid="home-empty-generate-button">
+          Wygeneruj fiszki AI
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => (window.location.href = "/flashcards")}
+          data-testid="home-empty-manual-button"
+        >
           Dodaj ręcznie
         </Button>
       </div>

@@ -40,7 +40,7 @@ export function ResetPasswordForm({ onSwitchToLogin }: ResetPasswordFormProps) {
       if (authError) throw authError;
 
       setSuccessMessage("Link do resetowania hasła został wysłany na Twój e-mail.");
-    } catch (e: any) {
+    } catch {
       setError("Błąd wysyłania linku. Spróbuj ponownie.");
     } finally {
       setLoading(false);
