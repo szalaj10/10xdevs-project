@@ -66,17 +66,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      - name: Check if secrets are configured
+        id: check-secrets
+        run: |
+          if [ -z "$PUBLIC_SUPABASE_URL" ]; then
+            echo "configured=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Secrets not configured - E2E tests will be skipped"
+          else
+            echo "configured=true" >> $GITHUB_OUTPUT
+            echo "✅ Secrets configured - E2E tests will run"
+          fi
+
       - name: Setup Node and install
+        if: steps.check-secrets.outputs.configured == 'true'
         uses: ./.github/actions/node-setup
 
       - name: Install Playwright browsers (per config)
+        if: steps.check-secrets.outputs.configured == 'true'
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
+        if: steps.check-secrets.outputs.configured == 'true'
         run: npm run test:e2e
 
       - name: Upload Playwright report
-        if: always()
+        if: steps.check-secrets.outputs.configured == 'true' && always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
@@ -84,7 +98,7 @@ jobs:
           retention-days: 7
 
       - name: Upload E2E V8 coverage
-        if: always()
+        if: steps.check-secrets.outputs.configured == 'true' && always()
         uses: actions/upload-artifact@v4
         with:
           name: e2e-v8-coverage
@@ -95,7 +109,7 @@ jobs:
     name: Status comment
     needs: [unit-tests, e2e-tests]
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ github.event_name == 'pull_request' && always() }}
     permissions:
       contents: read
       pull-requests: write
@@ -105,14 +119,39 @@ jobs:
         with:
           script: |
             const pr = context.payload.pull_request;
-            const body = [
-              `✅ Lint, unit tests i e2e przeszły pomyślnie.`,
-              ``,
-              `Artefakty:`,
-              `- unit-coverage (Vitest)`,
-              `- playwright-report (E2E)`,
-              `- e2e-v8-coverage (Node V8 raw)`,
-            ].join('\n');
+            const e2eResult = '${{ needs.e2e-tests.result }}';
+            
+            let body;
+            if (e2eResult === 'success') {
+              body = [
+                `✅ Lint, unit tests i e2e przeszły pomyślnie.`,
+                ``,
+                `Artefakty:`,
+                `- unit-coverage (Vitest)`,
+                `- playwright-report (E2E)`,
+                `- e2e-v8-coverage (Node V8 raw)`,
+              ].join('\n');
+            } else if (e2eResult === 'skipped') {
+              body = [
+                `✅ Lint i unit tests przeszły pomyślnie.`,
+                `⚠️ E2E tests zostały pominięte (brak skonfigurowanych secrets).`,
+                ``,
+                `Artefakty:`,
+                `- unit-coverage (Vitest)`,
+                ``,
+                `Aby włączyć E2E tests, skonfiguruj GitHub Secrets. Zobacz: GITHUB_SECRETS_SETUP.md`,
+              ].join('\n');
+            } else {
+              body = [
+                `❌ Niektóre testy nie przeszły.`,
+                ``,
+                `Status:`,
+                `- Lint: ${{ needs.lint.result }}`,
+                `- Unit tests: ${{ needs.unit-tests.result }}`,
+                `- E2E tests: ${e2eResult}`,
+              ].join('\n');
+            }
+            
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
