@@ -1,4 +1,4 @@
-import { test as base, type Page, type BrowserContext, expect } from "@playwright/test";
+import { test as base, type Page, type BrowserContext } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
 import { SignupPage } from "../pages/SignupPage";
 import { HomePage } from "../pages/HomePage";
@@ -18,37 +18,34 @@ interface AuthFixtures {
   authenticatedPage: unknown;
 }
 
-type Use<T> = (fixture: T) => Promise<void>;
+type UseFixture<T> = (fixture: T) => Promise<void>;
 
 export const test = base.extend<AuthFixtures>({
-  loginPage: async ({ page }: { page: Page }, use: Use<LoginPage>) => {
-    await use(new LoginPage(page));
+  loginPage: async ({ page }: { page: Page }, useFixture: UseFixture<LoginPage>) => {
+    await useFixture(new LoginPage(page));
   },
-  signupPage: async ({ page }: { page: Page }, use: Use<SignupPage>) => {
-    await use(new SignupPage(page));
+  signupPage: async ({ page }: { page: Page }, useFixture: UseFixture<SignupPage>) => {
+    await useFixture(new SignupPage(page));
   },
-  homePage: async ({ page }: { page: Page }, use: Use<HomePage>) => {
-    await use(new HomePage(page));
+  homePage: async ({ page }: { page: Page }, useFixture: UseFixture<HomePage>) => {
+    await useFixture(new HomePage(page));
   },
-  generatePage: async ({ page }: { page: Page }, use: Use<GeneratePage>) => {
-    await use(new GeneratePage(page));
+  generatePage: async ({ page }: { page: Page }, useFixture: UseFixture<GeneratePage>) => {
+    await useFixture(new GeneratePage(page));
   },
-  flashcardsPage: async (
-    { page }: { page: Page },
-    use: Use<FlashcardsPage>
-  ) => {
-    await use(new FlashcardsPage(page));
+  flashcardsPage: async ({ page }: { page: Page }, useFixture: UseFixture<FlashcardsPage>) => {
+    await useFixture(new FlashcardsPage(page));
   },
-  sessionsPage: async ({ page }: { page: Page }, use: Use<SessionsPage>) => {
-    await use(new SessionsPage(page));
+  sessionsPage: async ({ page }: { page: Page }, useFixture: UseFixture<SessionsPage>) => {
+    await useFixture(new SessionsPage(page));
   },
-  navBar: async ({ page }: { page: Page }, use: Use<NavBarPage>) => {
-    await use(new NavBarPage(page));
+  navBar: async ({ page }: { page: Page }, useFixture: UseFixture<NavBarPage>) => {
+    await useFixture(new NavBarPage(page));
   },
 
   authenticatedPage: async (
     { page, context }: { page: Page; context: BrowserContext },
-    use: Use<unknown>
+    useFixture: UseFixture<unknown>
   ) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
@@ -79,10 +76,8 @@ export const test = base.extend<AuthFixtures>({
     }
 
     await page.waitForTimeout(1000);
-    await use(undefined);
+    await useFixture(undefined);
   },
 });
 
 export { expect } from "@playwright/test";
-
-

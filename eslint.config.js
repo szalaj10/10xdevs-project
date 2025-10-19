@@ -62,5 +62,12 @@ export default tseslint.config(
   jsxA11yConfig,
   reactConfig,
   eslintPluginAstro.configs["flat/recommended"],
-  eslintPluginPrettier
+  eslintPluginPrettier,
+  // Allow console statements in example files
+  {
+    files: ["examples/**/*.{js,ts}"],
+    rules: {
+      "no-console": "off",
+    },
+  }
 );

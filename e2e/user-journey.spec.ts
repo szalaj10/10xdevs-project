@@ -303,7 +303,6 @@ test.describe('Complete User Journey', () => {
     // Przejdź do fiszek
     await navBar.goToFlashcards();
     await expect(page).toHaveURL('/flashcards');
-    console.log('   ✅ Link do fiszek działa');
     
     // Wróć do strony głównej
     await navBar.goToHome();
@@ -341,8 +340,6 @@ test.describe('Complete User Journey', () => {
     // Sprawdź czy navbar nie pokazuje już użytkownika
     const isStillLoggedIn = await navBar.isLoggedIn();
     expect(isStillLoggedIn).toBe(false);
-    
-    console.log('✅ Wylogowanie pomyślne');
 
     // ==========================================
     // PODSUMOWANIE
