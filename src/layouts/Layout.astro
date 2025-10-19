@@ -1,23 +1,52 @@
 ---
 import "../styles/global.css";
+import { NavBar } from "../components/NavBar";
 
 interface Props {
   title?: string;
+  showNav?: boolean;
 }
 
-const { title = "10x Astro Starter" } = Astro.props;
+const { title = "Fiszki AI", showNav = true } = Astro.props;
+
+// Verify user state from middleware
+const user = Astro.locals.user;
+const isAuthenticated = !!user;
+const userEmail = user?.email ?? null;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="pl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <!-- eslint-disable -->
+    <script is:inline>
+      // Load theme from localStorage before page renders to prevent flash
+      (function () {
+        const theme = localStorage.getItem("theme");
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else if (theme === "light") {
+          document.documentElement.classList.remove("dark");
+        } else {
+          // If no preference, check system preference
+          if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            document.documentElement.classList.add("dark");
+          }
+        }
+      })();
+    </script>
+    <script define:vars={{ isAuthenticated, userEmail }}>
+      window.__INITIAL_AUTH_STATE__ = isAuthenticated;
+      window.__INITIAL_AUTH_EMAIL__ = userEmail;
+    </script>
   </head>
   <body>
+    {showNav && <NavBar client:load initialAuthenticated={isAuthenticated} initialUserEmail={userEmail} />}
     <slot />
   </body>
 </html>

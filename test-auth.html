@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Authentication</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 10px 10px 0;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 6px;
+      background: #f0f9ff;
+      border: 1px solid #3b82f6;
+    }
+    .error {
+      background: #fef2f2;
+      border: 1px solid #ef4444;
+    }
+    pre {
+      background: #1f2937;
+      color: #f3f4f6;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    .token {
+      word-break: break-all;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 Test Authentication</h1>
+    <p>Test the Supabase authentication with the provided credentials.</p>
+    
+    <div>
+      <button onclick="testLogin()">Test Login</button>
+      <button onclick="checkSession()">Check Session</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    // Initialize Supabase client
+    const supabaseUrl = 'http://127.0.0.1:54321';
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+    const credentials = {
+      email: 'mszalajko@manufacturo.com',
+      password: 'Pracownik123'
+    };
+
+    function showResult(content, isError = false) {
+      const resultDiv = document.getElementById('result');
+      resultDiv.className = isError ? 'result error' : 'result';
+      resultDiv.innerHTML = content;
+    }
+
+    async function testLogin() {
+      showResult('🔄 Logging in...');
+      
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: credentials.email,
+          password: credentials.password
+        });
+
+        if (error) throw error;
+
+        const html = `
+          <h3>✅ Login Successful!</h3>
+          <p><strong>User ID:</strong> ${data.user.id}</p>
+          <p><strong>Email:</strong> ${data.user.email}</p>
+          <p><strong>Access Token:</strong></p>
+          <div class="token">${data.session.access_token}</div>
+          <details style="margin-top: 15px;">
+            <summary style="cursor: pointer; font-weight: bold;">Full Response</summary>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          </details>
+        `;
+        showResult(html);
+        
+        // Also log to console for easy copying
+        console.log('Access Token:', data.session.access_token);
+        console.log('Full Response:', data);
+      } catch (error) {
+        showResult(`
+          <h3>❌ Login Failed</h3>
+          <p><strong>Error:</strong> ${error.message}</p>
+          <pre>${JSON.stringify(error, null, 2)}</pre>
+        `, true);
+        console.error('Login error:', error);
+      }
+    }
+
+    async function checkSession() {
+      showResult('🔄 Checking session...');
+      
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        if (error) throw error;
+
+        if (session) {
+          const html = `
+            <h3>✅ Active Session Found</h3>
+            <p><strong>User ID:</strong> ${session.user.id}</p>
+            <p><strong>Email:</strong> ${session.user.email}</p>
+            <p><strong>Access Token:</strong></p>
+            <div class="token">${session.access_token}</div>
+            <p><strong>Expires At:</strong> ${new Date(session.expires_at * 1000).toLocaleString()}</p>
+          `;
+          showResult(html);
+        } else {
+          showResult(`
+            <h3>ℹ️ No Active Session</h3>
+            <p>Please login first.</p>
+          `);
+        }
+      } catch (error) {
+        showResult(`
+          <h3>❌ Error Checking Session</h3>
+          <p><strong>Error:</strong> ${error.message}</p>
+        `, true);
+      }
+    }
+
+    async function logout() {
+      showResult('🔄 Logging out...');
+      
+      try {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+
+        showResult(`
+          <h3>✅ Logged Out Successfully</h3>
+          <p>Session has been cleared.</p>
+        `);
+      } catch (error) {
+        showResult(`
+          <h3>❌ Logout Failed</h3>
+          <p><strong>Error:</strong> ${error.message}</p>
+        `, true);
+      }
+    }
+
+    // Auto-check session on load
+    window.addEventListener('load', checkSession);
+  </script>
+</body>
+</html>
+
+

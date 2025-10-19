@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Logowania</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .log {
+            background: #f5f5f5;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e9; color: #2e7d32; }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Logowania Supabase</h1>
+    
+    <div>
+        <button onclick="testLogin()">Test Login</button>
+        <button onclick="checkSession()">Check Session</button>
+        <button onclick="clearLogs()">Clear Logs</button>
+    </div>
+    
+    <div id="logs"></div>
+
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+        const supabaseUrl = 'http://127.0.0.1:54321';
+        const supabaseKey = 'sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH';
+
+        window.supabase = createClient(supabaseUrl, supabaseKey);
+
+        window.log = function(message, type = 'info') {
+            const logs = document.getElementById('logs');
+            const div = document.createElement('div');
+            div.className = `log ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logs.appendChild(div);
+            console.log(message);
+        };
+
+        window.testLogin = async function() {
+            log('Attempting login...');
+            
+            try {
+                const { data, error } = await window.supabase.auth.signInWithPassword({
+                    email: 'mszalajko@manufacturo.com',
+                    password: 'Pracownik123'
+                });
+
+                if (error) {
+                    log(`Login error: ${error.message}`, 'error');
+                } else {
+                    log(`Login successful! User: ${data.user.email}`, 'success');
+                    log(`Session: ${data.session ? 'Yes' : 'No'}`, 'success');
+                    log(`Access token: ${data.session?.access_token?.substring(0, 50)}...`, 'info');
+                    
+                    // Check cookies
+                    log(`Cookies: ${document.cookie}`, 'info');
+                }
+            } catch (err) {
+                log(`Exception: ${err.message}`, 'error');
+            }
+        };
+
+        window.checkSession = async function() {
+            log('Checking session...');
+            
+            try {
+                const { data, error } = await window.supabase.auth.getSession();
+                
+                if (error) {
+                    log(`Session error: ${error.message}`, 'error');
+                } else if (data.session) {
+                    log(`Session found! User: ${data.session.user.email}`, 'success');
+                } else {
+                    log('No active session', 'error');
+                }
+            } catch (err) {
+                log(`Exception: ${err.message}`, 'error');
+            }
+        };
+
+        window.clearLogs = function() {
+            document.getElementById('logs').innerHTML = '';
+        };
+
+        // Auto-check session on load
+        window.addEventListener('load', () => {
+            log('Page loaded, checking session...');
+            checkSession();
+        });
+    </script>
+</body>
+</html>
+
+

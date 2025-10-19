@@ -1,0 +1,11 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ResetPasswordConfirmPage from "../../components/ResetPasswordConfirmPage";
+
+export const prerender = false;
+---
+
+<Layout title="Resetowanie hasła - Fiszki AI" showNav={false}>
+  <ResetPasswordConfirmPage client:load />
+</Layout>
+

@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import AuthPage from "../components/AuthPage";
+
+export const prerender = false;
+---
+
+<Layout title="Logowanie - Fiszki AI" showNav={true}>
+  <AuthPage client:load />
+</Layout>

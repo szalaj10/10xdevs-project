@@ -9,11 +9,12 @@
 1. [Tech Stack](#tech-stack)  
 2. [Getting Started](#getting-started)  
 3. [Available Scripts](#available-scripts)  
-4. [Project Scope](#project-scope)  
+4. [Testing](#testing)  
+5. [Project Scope](#project-scope)  
    - [In Scope](#in-scope)  
    - [Out of Scope](#out-of-scope)  
-5. [Project Status](#project-status)  
-6. [License](#license)  
+6. [Project Status](#project-status)  
+7. [License](#license)  
 
 ---
 
@@ -34,6 +35,8 @@
   - Node.js v22.14.0  
   - ESLint & Prettier (with Husky + lint-staged)  
   - GitHub Actions (CI)  
+  - Vitest (unit & integration tests)  
+  - Playwright (E2E tests)  
 
 ---
 
@@ -54,13 +57,52 @@ nvm use           # if you use nvm
 npm install       # or yarn install
 ```
 
+### Environment Setup
+
+1. **Set up Supabase locally**
+
+```bash
+# Install Supabase CLI if you haven't already
+npm install -g supabase
+
+# Start local Supabase instance
+supabase start
+
+# Get your service role key
+supabase status
+```
+
+2. **Create environment file**
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+# Get these from 'supabase status' command
+SUPABASE_URL=http://127.0.0.1:54321
+SUPABASE_KEY=your-anon-key-here
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
+
+# For client-side (browser) access
+PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+PUBLIC_SUPABASE_KEY=your-anon-key-here
+
+# Optional: OpenRouter API key for AI generation
+OPENROUTER_API_KEY=your-openrouter-key-here
+```
+
+3. **Run database migrations**
+
+```bash
+supabase db reset
+```
+
 ### Development
 
 ```bash
 npm run dev
 ```
 
-Open your browser at `http://localhost:3000` to view the app.
+Open your browser at `http://localhost:4321` to view the app.
 
 ---
 
@@ -88,6 +130,51 @@ In the project directory, you can run:
 
 - `npm run format`  
   Formats code with Prettier.
+
+- `npm run test`  
+  Runs unit and integration tests with Vitest.
+
+- `npm run test:watch`  
+  Runs tests in watch mode for development.
+
+- `npm run test:coverage`  
+  Generates test coverage report.
+
+- `npm run test:e2e`  
+  Runs end-to-end tests with Playwright.
+
+- `npm run test:e2e:ui`  
+  Opens Playwright UI for interactive E2E testing.
+
+---
+
+## Testing
+
+The project includes comprehensive testing setup with both unit/integration tests (Vitest) and E2E tests (Playwright).
+
+### Quick Start
+
+```bash
+# Run unit tests
+npm run test
+
+# Run E2E tests (requires dev server running)
+npm run test:e2e
+
+# Generate coverage report
+npm run test:coverage
+```
+
+### Documentation
+
+- 📖 [Testing Quick Start Guide](./TESTING_QUICK_START.md) - Szybki start z testami
+- 📚 [Complete Testing Setup Guide](./TESTING_SETUP.md) - Pełna dokumentacja
+- 🧪 [Unit Tests README](./tests/README.md) - Testy jednostkowe
+- 🎭 [E2E Tests README](./e2e/README.md) - Testy E2E
+
+### Test Coverage
+
+Current coverage thresholds: **≥70%** for critical modules
 
 ---
 
@@ -117,9 +204,17 @@ In the project directory, you can run:
 ## Project Status
 
 🚧 MVP under active development  
-- Core flashcard flows implemented  
-- AI generation & candidate review in progress  
-- SRS session & analytics upcoming  
+- ✅ Core flashcard flows implemented  
+- ✅ AI generation & candidate review in progress  
+- ✅ **Testing environment fully configured** (Vitest + Playwright)  
+- 🔄 SRS session & analytics upcoming  
+
+### Testing Status
+- ✅ Unit tests: 12/12 passing
+- ✅ Vitest configured with 70% coverage threshold
+- ✅ Playwright E2E tests ready
+- ✅ CI/CD pipeline configured
+- 📖 [See Testing Setup Complete](./TESTING_SETUP_COMPLETE.md)
 
 Contributions and feedback are welcome!
 

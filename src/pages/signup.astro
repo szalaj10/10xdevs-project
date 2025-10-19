@@ -1,0 +1,19 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SignupForm from "../components/SignupForm";
+
+export const prerender = false;
+---
+
+<Layout title="Rejestracja - Fiszki AI" showNav={true}>
+  <div class="min-h-screen flex items-center justify-center bg-background px-4 sm:px-6 lg:px-8">
+    <SignupForm
+      client:load
+      onSwitchToLogin={() => {
+        window.location.href = "/login";
+      }}
+    />
+  </div>
+</Layout>
+
+

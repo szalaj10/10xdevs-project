@@ -1,0 +1,10 @@
+---
+import Layout from "../layouts/Layout.astro";
+import EmailVerificationResultPage from "../components/EmailVerificationResultPage";
+
+export const prerender = false;
+---
+
+<Layout title="Weryfikacja e-mail - Fiszki AI" showNav={false}>
+  <EmailVerificationResultPage client:load />
+</Layout>

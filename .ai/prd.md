@@ -21,17 +21,52 @@ Manualne tworzenie wysokiej jakości fiszek jest czasochłonne, co zniechęca do
 - Usunięcie konta: twarde usunięcie wszystkich danych użytkownika w ≤24h.
 - Sesje zabezpieczone cookie HTTP‑only (szczegóły techniczne poza PRD, do implementacji).
 
-3.2 Talia i karty
-- Domyślnie nowa talia tworzona per podany temat; nazwa edytowalna.
-- Manualne dodawanie kart: szybki formularz w widoku talii (front/back).
-- Ostrzeżenie o potencjalnym duplikacie frontu w obrębie talii (użytkownik może dodać mimo ostrzeżenia).
-- Edycja kart w modalu z walidacją i podglądem Markdown.
-- Format kart: basic Markdown; limity znaków: front ≤200, back ≤350.
-- Model danych kart w DB: (id, deckId, front, back, createdAt, updatedAt).
+3.2 Flashcards
+- Format: pytanie-odpowiedź
+- Przykład: Temat "kardiologia ogólna" → Pytanie: "Jakie podstawowe funkcje pełni serce?" → Odpowiedź: "Serce jest głównym organem krwioobiegu..."
+- Encja: `flashcards`
+  - Atrybuty:
+    - `id BIGSERIAL PRIMARY KEY`
+    - `front TEXT NOT NULL CHECK (char_length(front) ≤ 200)` - zawiera pytanie
+    - `back TEXT NOT NULL CHECK (char_length(back) ≤ 350)` - zawiera odpowiedź
+    - `source TEXT`
+    - `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`
+    - `updated_at TIMESTAMPTZ NOT NULL DEFAULT now()`
+    - `generation_id BIGINT REFERENCES generations(id) ON DELETE SET NULL`
+    - `user_id UUID REFERENCES users(id) ON DELETE CASCADE`
+
+3.3 Generations
+- Encja: `generations`
+  - Atrybuty:
+    - `id BIGSERIAL PRIMARY KEY`
+    - `user_id UUID REFERENCES users(id) ON DELETE CASCADE`
+    - `model TEXT NOT NULL`
+    - `generated_count INT NOT NULL`
+    - `accepted_unedited_count INT NOT NULL`
+    - `accepted_edited_count INT NOT NULL`
+    - `source_text_hash TEXT NOT NULL`
+    - `source_text_length INT NOT NULL`
+    - `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`
+    - `updated_at TIMESTAMPTZ NOT NULL DEFAULT now()`
+
+3.4 Generation Error Logs
+- Encja: `generation_error_logs`
+  - Atrybuty:
+    - `id BIGSERIAL PRIMARY KEY`
+    - `user_id UUID REFERENCES users(id) ON DELETE CASCADE`
+    - `model TEXT NOT NULL`
+    - `source_text_hash TEXT NOT NULL`
+    - `source_text_length INT NOT NULL`
+    - `error_code TEXT NOT NULL`
+    - `error_message TEXT NOT NULL`
+    - `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`
 
 3.3 Generowanie AI (z tematu)
-- Użytkownik podaje temat w wolnym tekście.
-- System generuje 10–20 propozycji kart jako kandydaty.
+- Użytkownik podaje temat w wolnym tekście (np. "kardiologia ogólna", "historia Polski", "programowanie w Python").
+- System generuje 10–20 propozycji fiszek w formacie pytanie-odpowiedź jako kandydaty.
+- Każda fiszka składa się z:
+  - Pytania (front) - np. "Jakie podstawowe funkcje pełni serce?"
+  - Odpowiedzi (back) - np. "Serce jest głównym organem krwioobiegu, pompuje krew do całego organizmu, dostarcza tlen i składniki odżywcze do tkanek"
 - Propozycje trafiają do candidate_cards (tymczasowe), użytkownik przegląda i dla każdej wybiera: zaakceptuj/edytuj/odrzuć.
 - Do stałej talii zapisują się wyłącznie zaakceptowane (po ewentualnej edycji) karty.
 - Odrzucone propozycje nie są zapisywane trwale (przepadają). Dopuszczalne minimalne logi metadanych do poprawy jakości (bez treści jawnej) – szczegóły poniżej w granicach.
@@ -65,9 +100,9 @@ Manualne tworzenie wysokiej jakości fiszek jest czasochłonne, co zniechęca do
 ## 4. Granice produktu
 W zakresie
 - Web‑only (desktop i mobile web, responsywnie).
-- Generowanie wyłącznie z tematu (wolny tekst). Brak „Utwórz z tekstu” w MVP.
+- Generowanie fiszek w formacie pytanie-odpowiedź wyłącznie z tematu (wolny tekst). Brak „Utwórz z tekstu" w MVP.
 - Prosty SRS z trzema ocenami i stałymi krótkimi interwałami.
-- Basic Markdown w kartach, limity znaków front/back.
+- Basic Markdown w kartach, limity znaków pytanie (200) / odpowiedź (350).
 
 Poza zakresem MVP
 - Import/eksport zaawansowany (APKG, integracje Anki/Notion/Quizlet).
@@ -106,10 +141,11 @@ Kryteria akceptacji:
 
 US‑003
 Tytuł: Utworzenie talii z tematu
-Opis: Jako uczeń chcę wpisać temat i otrzymać propozycje kart, aby szybko zbudować pierwszą talię.
+Opis: Jako uczeń chcę wpisać temat i otrzymać propozycje fiszek w formacie pytanie-odpowiedź, aby szybko zbudować pierwszą talię.
 Kryteria akceptacji:
-- Użytkownik wpisuje wolny tekst tematu i uruchamia generację.
-- System zwraca 10–20 propozycji w candidate_cards.
+- Użytkownik wpisuje wolny tekst tematu (np. "kardiologia ogólna") i uruchamia generację.
+- System zwraca 10–20 propozycji fiszek w formacie pytanie-odpowiedź w candidate_cards.
+- Każda propozycja zawiera sensowne pytanie i odpowiedź związaną z tematem.
 - Błędy generacji wyświetlają czytelny komunikat i możliwość ponowienia.
 
 US‑004

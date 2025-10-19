@@ -1,3 +1,23 @@
+### Technologie testowe
+
+- **Testy jednostkowe i integracyjne**
+  - Vitest 2.x – szybki test runner zbudowany na Vite, natywna integracja z Astro i TypeScript
+  - @testing-library/react – testowanie komponentów React z perspektywy użytkownika
+  - @testing-library/user-event – symulacja interakcji użytkownika
+  - happy-dom lub jsdom – środowisko DOM dla testów jednostkowych
+
+- **Testy E2E**
+  - Playwright 1.x – nowoczesny framework do testów end-to-end
+  - Wsparcie dla wszystkich głównych przeglądarek (Chromium, Firefox, WebKit)
+  - Natywne wsparcie TypeScript i async/await
+  - Możliwość testowania autentykacji Supabase i przepływów użytkownika
+  - Trace viewer i UI mode dla debugowania testów
+
+- **Uzasadnienie wyboru**
+  - Vitest: bezproblemowa integracja z Astro (oba oparte na Vite), szybsze niż Jest, lepsze wsparcie ESM
+  - Playwright: bardziej niezawodny niż Cypress dla aplikacji SSR/hybrid, lepsze API, silniejsze wsparcie dla wielu przeglądarek
+  - Testing Library: zgodność z filozofią testowania zachowań użytkownika, nie implementacji
+
 ### Ocena stacku względem PRD
 
 - 1) Szybkość dostarczenia MVP: dobra, ale można prościej
@@ -44,8 +64,11 @@
 
 - Zmienić Tailwind 4 → Tailwind 3.4; React 19 → React 18 (jeśli brak twardej potrzeby).
 - Zrezygnować z Docker + DigitalOcean na MVP; wdrożyć front na Vercel, backend/DB na Supabase.
-- Ustalić 1 model OpenRouter „small/mini” i limity kosztów; dodać retry/backoff + cache promptów.
+- Ustalić 1 model  er „small/mini" i limity kosztów; dodać retry/backoff + cache promptów.
 - Dodać Supabase RLS, cron do TTL candidate_cards, pg_trgm dla duplikatów, Edge Function dla generacji/limitów.
+- Skonfigurować Vitest dla testów jednostkowych komponentów React, serwisów i helpers.
+- Skonfigurować Playwright dla testów E2E kluczowych przepływów (logowanie, generacja kart, sesja SRS).
+- Dodać testy do CI pipeline (GitHub Actions) z progiem pokrycia kodu ≥70% dla krytycznych modułów.
 
 ### Wniosek
 
