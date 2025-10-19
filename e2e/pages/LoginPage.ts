@@ -42,7 +42,9 @@ export class LoginPage {
     await this.signInButton.waitFor({ state: "visible" });
     // Use Promise.all to wait for navigation
     await Promise.all([
-      this.page.waitForNavigation({ waitUntil: "networkidle", timeout: 10000 }).catch(() => {}),
+      this.page.waitForNavigation({ waitUntil: "networkidle", timeout: 10000 }).catch(() => {
+        // Ignore navigation errors
+      }),
       this.signInButton.click(),
     ]);
   }

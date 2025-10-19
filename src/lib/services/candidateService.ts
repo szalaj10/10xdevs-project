@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "../../db/supabase.client";
-import type { CandidateCardDTO, EditCandidateCardDTO, FlashcardDTO, GenerationDTO } from "../../types";
+import type { CandidateCardDTO, EditCandidateCardDTO, FlashcardDTO } from "../../types";
 
 /**
  * Service for managing candidate cards operations including accept, reject, and edit.

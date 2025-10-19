@@ -4,7 +4,7 @@ import { Card, CardContent } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 import { Alert, AlertDescription } from "./ui/alert";
 import { formatDuration } from "../lib/formatters";
-import type { SessionDTO, SessionItemDTO, GetSessionResponseDTO } from "../types";
+import type { SessionDTO, GetSessionResponseDTO } from "../types";
 import { getAccessToken } from "../lib/auth";
 
 interface Props {
@@ -24,7 +24,7 @@ interface SessionStatsVM {
 }
 
 export default function SessionSummaryPage({ sessionId }: Props) {
-  const [session, setSession] = useState<SessionDTO | null>(null);
+  const [, setSession] = useState<SessionDTO | null>(null);
   const [stats, setStats] = useState<SessionStatsVM | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

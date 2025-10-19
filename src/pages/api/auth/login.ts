@@ -22,7 +22,7 @@ const loginSchema = z.object({
  * - 400: Invalid credentials or validation error
  * - 500: Internal server error
  */
-export const POST: APIRoute = async ({ request, locals, cookies }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     // Parse and validate request body
     const body = await request.json();

@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { createSession } from "../../../lib/services/sessionService";
-import { requireAuth, errorResponse, jsonResponse, handleError } from "../../../lib/apiHelpers";
+import { requireAuth, jsonResponse, handleError } from "../../../lib/apiHelpers";
 
 export const prerender = false;
 

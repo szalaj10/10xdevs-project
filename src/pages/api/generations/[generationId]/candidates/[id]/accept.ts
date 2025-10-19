@@ -3,7 +3,6 @@ import { acceptCandidate } from "../../../../../../lib/services/candidateService
 import {
   requireAuth,
   parseNumericId,
-  errorResponse,
   jsonResponse,
   handleError,
 } from "../../../../../../lib/apiHelpers";
