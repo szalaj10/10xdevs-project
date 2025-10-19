@@ -1,4 +1,4 @@
-# 10xDevs Flashcards
+# 10xDevs Flashcards 
 
 [![Version](https://img.shields.io/badge/version-0.0.1-blue)](https://github.com/your-org/10xdevs-project) [![License: MIT](https://img.shields.io/badge/license-MIT-green)]
 
@@ -18,7 +18,7 @@
 
 ---
 
-## Tech Stack
+## Tech Stack 
 
 - **Frontend**  
   - Astro 5.13.7  
