@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures/auth.fixture';
+import { test, expect } from "./fixtures/auth.fixture";
 import { faker } from '@faker-js/faker';
 
 /**
@@ -35,7 +35,7 @@ test.describe('Complete User Journey', () => {
     // ==========================================
     // KROK 1: Rejestracja nowego użytkownika
     // ==========================================
-    console.log('📝 KROK 1: Rejestracja użytkownika:', testUser.email);
+    // step info
     
     await signupPage.goto();
     await expect(page).toHaveURL('/signup');
@@ -52,23 +52,22 @@ test.describe('Complete User Journey', () => {
     
     if (hasError) {
       const errorMsg = await signupPage.getErrorMessage();
-      console.log('⚠️  Błąd rejestracji:', errorMsg);
+      // log error message only in debug
       
       // Jeśli użytkownik już istnieje, użyj istniejącego
       if (errorMsg.includes('już istnieje')) {
-        console.log('ℹ️  Użytkownik już istnieje, przechodzimy do logowania');
+        // continue if user exists
       } else {
         throw new Error(`Rejestracja nie powiodła się: ${errorMsg}`);
       }
     } else if (hasSuccess) {
-      console.log('✅ Rejestracja pomyślna - wymagana weryfikacja email');
-      console.log('ℹ️  W środowisku testowym pomijamy weryfikację email');
+      // success
     }
 
     // ==========================================
     // KROK 2: Logowanie
     // ==========================================
-    console.log('🔐 KROK 2: Logowanie użytkownika');
+    // logging in
     
     await loginPage.goto();
     await expect(page).toHaveURL('/login');
@@ -83,12 +82,12 @@ test.describe('Complete User Journey', () => {
     await expect(page).toHaveURL('/');
     await expect(homePage.welcomeHeading).toBeVisible();
     
-    console.log('✅ Logowanie pomyślne');
+    // ok
 
     // ==========================================
     // KROK 3: Sprawdzenie strony głównej
     // ==========================================
-    console.log('🏠 KROK 3: Sprawdzenie strony głównej');
+    // home check
     
     // Sprawdź czy navbar pokazuje zalogowanego użytkownika
     const isLoggedIn = await navBar.isLoggedIn();
@@ -97,12 +96,12 @@ test.describe('Complete User Journey', () => {
     const userEmail = await navBar.getUserEmail();
     expect(userEmail).toContain(testUser.email);
     
-    console.log('✅ Strona główna wyświetla się poprawnie');
+    // ok
 
     // ==========================================
     // KROK 4: Generowanie fiszek AI
     // ==========================================
-    console.log('🤖 KROK 4: Generowanie fiszek AI');
+    // generating cards
     
     // Przejdź do strony generowania
     await navBar.goToGenerate();
@@ -110,68 +109,68 @@ test.describe('Complete User Journey', () => {
     
     // Wygeneruj fiszki na temat TypeScript
     const topic = 'TypeScript podstawy - typy, interfejsy, klasy';
-    console.log(`   Temat: "${topic}"`);
+    // topic info
     
     await generatePage.generate(topic);
     
     // Poczekaj na wygenerowanie kandydatów (AI może zająć czas)
-    console.log('   ⏳ Czekam na wygenerowanie fiszek przez AI...');
+    // waiting for AI
     await generatePage.waitForCandidates(60000); // 60 sekund timeout
     
     // Sprawdź ile fiszek zostało wygenerowanych
     const candidateCount = await generatePage.getCandidateCount();
-    console.log(`   ✅ Wygenerowano ${candidateCount} kandydatów na fiszki`);
+    // generated count
     expect(candidateCount).toBeGreaterThan(0);
     expect(candidateCount).toBeLessThanOrEqual(10);
     
     // Odrzuć pierwszą fiszkę (symulacja selekcji)
     if (candidateCount > 1) {
-      console.log('   🗑️  Odrzucam pierwszą fiszkę');
+      // reject first
       await generatePage.rejectCandidate(0);
       await page.waitForTimeout(500);
     }
     
     // Zapisz zaakceptowane fiszki
-    console.log('   💾 Zapisuję zaakceptowane fiszki');
+    // saving
     await generatePage.saveAll();
     
     // Poczekaj na przekierowanie do listy fiszek
     await page.waitForTimeout(2000);
     await expect(page).toHaveURL('/flashcards');
     
-    console.log('✅ Fiszki zostały wygenerowane i zapisane');
+    // ok
 
     // ==========================================
     // KROK 5: Przeglądanie listy fiszek
     // ==========================================
-    console.log('📚 KROK 5: Przeglądanie listy fiszek');
+    // list view
     
     await expect(flashcardsPage.heading).toBeVisible();
     
     // Sprawdź ile fiszek mamy na liście
     await page.waitForTimeout(1000);
     const flashcardCount = await flashcardsPage.getFlashcardCount();
-    console.log(`   📊 Liczba fiszek na liście: ${flashcardCount}`);
+    // count info
     expect(flashcardCount).toBeGreaterThan(0);
     
     // Wyszukaj fiszki po słowie kluczowym
-    console.log('   🔍 Testuję wyszukiwanie fiszek');
+    // search
     await flashcardsPage.search('Type');
     await page.waitForTimeout(1000);
     
     const searchResults = await flashcardsPage.getFlashcardCount();
-    console.log(`   📊 Wyniki wyszukiwania: ${searchResults}`);
+    // search results
     
     // Wyczyść wyszukiwanie
     await flashcardsPage.search('');
     await page.waitForTimeout(1000);
     
-    console.log('✅ Lista fiszek działa poprawnie');
+    // ok
 
     // ==========================================
     // KROK 6: Dodanie ręcznej fiszki
     // ==========================================
-    console.log('✍️  KROK 6: Dodawanie ręcznej fiszki');
+    // manual add
     
     await flashcardsPage.clickAdd();
     
@@ -194,12 +193,12 @@ test.describe('Complete User Journey', () => {
     await expect(dialog).not.toBeVisible();
     await page.waitForTimeout(1000);
     
-    console.log('✅ Ręczna fiszka została dodana');
+    // ok
 
     // ==========================================
     // KROK 7: Rozpoczęcie sesji nauki
     // ==========================================
-    console.log('🎯 KROK 7: Rozpoczęcie sesji nauki');
+    // start session
     
     // Przejdź do sesji
     await navBar.goToSessions();
@@ -210,9 +209,9 @@ test.describe('Complete User Journey', () => {
     const isStartDisabled = await startButton.isDisabled();
     
     if (isStartDisabled) {
-      console.log('⚠️  Brak fiszek do nauki - pomijam sesję');
+      // skip if none
     } else {
-      console.log('   ▶️  Rozpoczynam sesję nauki');
+      // starting
       await sessionsPage.startSession();
       
       // Poczekaj na załadowanie sesji
@@ -222,22 +221,22 @@ test.describe('Complete User Journey', () => {
       const isActive = await sessionsPage.isSessionActive();
       expect(isActive).toBe(true);
       
-      console.log('   ✅ Sesja nauki rozpoczęta');
+      // ok
 
       // ==========================================
       // KROK 8: Ocenianie fiszek
       // ==========================================
-      console.log('⭐ KROK 8: Ocenianie fiszek');
+      // rating
       
       // Przejrzyj 3 fiszki
       for (let i = 0; i < 3; i++) {
         const stillActive = await sessionsPage.flashcardCard.isVisible();
         if (!stillActive) {
-          console.log('   ℹ️  Sesja zakończona');
+          // session done
           break;
         }
         
-        console.log(`   📖 Fiszka ${i + 1}/3`);
+        // step card index
         
         // Odkryj odpowiedź
         await sessionsPage.revealAnswer();
@@ -247,7 +246,7 @@ test.describe('Complete User Journey', () => {
         const ratings: Array<'hard' | 'normal' | 'easy'> = ['hard', 'normal', 'easy'];
         const rating = ratings[i % 3];
         
-        console.log(`   ⭐ Oceniam jako: ${rating}`);
+        // rating label
         
         if (rating === 'hard') {
           await sessionsPage.rateHard();
@@ -261,17 +260,17 @@ test.describe('Complete User Journey', () => {
         await page.waitForTimeout(1500);
       }
       
-      console.log('✅ Fiszki zostały ocenione');
+      // ok
     }
 
     // ==========================================
     // KROK 9: Test skrótów klawiszowych
     // ==========================================
-    console.log('⌨️  KROK 9: Test skrótów klawiszowych');
+    // shortcuts
     
     const stillInSession = await sessionsPage.flashcardCard.isVisible();
     if (stillInSession) {
-      console.log('   🎹 Testuję skrót klawiszowy - Spacja');
+      // space shortcut
       
       // Użyj spacji do odkrycia odpowiedzi
       await page.keyboard.press('Space');
@@ -280,26 +279,26 @@ test.describe('Complete User Journey', () => {
       // Sprawdź czy odpowiedź jest widoczna
       const backVisible = await sessionsPage.flashcardBack.isVisible();
       if (backVisible) {
-        console.log('   ✅ Spacja działa - odpowiedź odkryta');
+        // ok
         
         // Użyj klawisza 2 do oceny
-        console.log('   🎹 Testuję skrót klawiszowy - 2 (normal)');
+        // numeric shortcut
         await page.keyboard.press('2');
         await page.waitForTimeout(1500);
         
-        console.log('   ✅ Skróty klawiszowe działają');
+        // ok
       }
     }
 
     // ==========================================
     // KROK 10: Nawigacja po aplikacji
     // ==========================================
-    console.log('🧭 KROK 10: Test nawigacji');
+    // navigation
     
     // Przejdź do strony głównej przez logo
     await navBar.goToHome();
     await expect(page).toHaveURL('/');
-    console.log('   ✅ Logo prowadzi do strony głównej');
+    // ok
     
     // Przejdź do fiszek
     await navBar.goToFlashcards();
@@ -313,7 +312,7 @@ test.describe('Complete User Journey', () => {
     // ==========================================
     // KROK 11: Przełączenie motywu
     // ==========================================
-    console.log('🎨 KROK 11: Test przełączania motywu');
+    // theme
     
     const htmlElement = page.locator('html');
     const initialTheme = await htmlElement.getAttribute('class');
@@ -324,12 +323,12 @@ test.describe('Complete User Journey', () => {
     const newTheme = await htmlElement.getAttribute('class');
     expect(newTheme).not.toBe(initialTheme);
     
-    console.log(`   ✅ Motyw zmieniony z "${initialTheme}" na "${newTheme}"`);
+    // ok
 
     // ==========================================
     // KROK 12: Wylogowanie
     // ==========================================
-    console.log('👋 KROK 12: Wylogowanie');
+    // logout
     
     await navBar.logout();
     
@@ -348,20 +347,7 @@ test.describe('Complete User Journey', () => {
     // ==========================================
     // PODSUMOWANIE
     // ==========================================
-    console.log('\n🎉 ========================================');
-    console.log('🎉 SUKCES! Pełna ścieżka użytkownika działa!');
-    console.log('🎉 ========================================\n');
-    console.log('✅ Rejestracja');
-    console.log('✅ Logowanie');
-    console.log('✅ Generowanie fiszek AI');
-    console.log('✅ Zarządzanie fiszkami');
-    console.log('✅ Sesja nauki');
-    console.log('✅ Ocenianie fiszek');
-    console.log('✅ Skróty klawiszowe');
-    console.log('✅ Nawigacja');
-    console.log('✅ Przełączanie motywu');
-    console.log('✅ Wylogowanie');
-    console.log('\n========================================\n');
+    // summary
   });
 });
 
