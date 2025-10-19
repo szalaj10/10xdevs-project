@@ -11,7 +11,6 @@ export function NavBar({
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(initialAuthenticated);
-  const [loading, setLoading] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(initialUserEmail);
   const [isDark, setIsDark] = useState(false);
   const { supabase } = useSupabase();
@@ -87,22 +86,6 @@ export function NavBar({
     { href: "/sessions", label: "Nauka" },
     { href: "/generate/new", label: "Generuj" },
   ];
-
-  if (loading) {
-    return (
-      <nav className="bg-background border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <a href="/" className="text-xl font-bold text-foreground">
-                Fiszki AI
-              </a>
-            </div>
-          </div>
-        </div>
-      </nav>
-    );
-  }
 
   return (
     <nav className="bg-background border-b" role="navigation" aria-label="Główna nawigacja" data-testid="navbar">

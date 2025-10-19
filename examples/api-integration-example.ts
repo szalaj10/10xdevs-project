@@ -258,8 +258,8 @@ export const POST_WITH_RETRY: APIRoute = async ({ request }) => {
       if (
         error instanceof RateLimitError ||
         error instanceof NetworkError ||
-        (error as Error & { statusCode?: number }).statusCode !== undefined &&
-          (error as Error & { statusCode: number }).statusCode >= 500
+        ((error as Error & { statusCode?: number }).statusCode !== undefined &&
+          (error as Error & { statusCode: number }).statusCode >= 500)
       ) {
         if (attempt < maxRetries) {
           const delay = Math.pow(2, attempt - 1) * 1000;

@@ -28,29 +28,37 @@ Object.defineProperty(window, "matchMedia", {
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {}
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  disconnect() {}
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  observe() {}
+  constructor() {
+    // Mock constructor
+  }
+  disconnect() {
+    // Mock method
+  }
+  observe() {
+    // Mock method
+  }
   takeRecords() {
     return [];
   }
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  unobserve() {}
+  unobserve() {
+    // Mock method
+  }
 } as unknown as typeof IntersectionObserver;
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {}
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  disconnect() {}
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  observe() {}
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  unobserve() {}
+  constructor() {
+    // Mock constructor
+  }
+  disconnect() {
+    // Mock method
+  }
+  observe() {
+    // Mock method
+  }
+  unobserve() {
+    // Mock method
+  }
 } as unknown as typeof ResizeObserver;
 
 // Extend expect with custom matchers if needed
