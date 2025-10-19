@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Example: Integrating GroqService with Astro API Routes
  *
