@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 /**
  * Page Object Model for Login Page
@@ -17,17 +17,17 @@ export class LoginPage {
     this.page = page;
     this.emailInput = page.getByLabel(/email/i);
     this.passwordInput = page.getByLabel(/password/i);
-    this.signInButton = page.getByTestId('login-submit-button');
-    this.signUpLink = page.getByRole('link', { name: /zarejestruj|sign up/i });
-    this.resetPasswordLink = page.getByRole('link', { name: /zapomnia|forgot password/i });
-    this.errorMessage = page.getByRole('alert');
+    this.signInButton = page.getByTestId("login-submit-button");
+    this.signUpLink = page.getByRole("link", { name: /zarejestruj|sign up/i });
+    this.resetPasswordLink = page.getByRole("link", { name: /zapomnia|forgot password/i });
+    this.errorMessage = page.getByRole("alert");
   }
 
   /**
    * Navigate to login page
    */
   async goto() {
-    await this.page.goto('/login');
+    await this.page.goto("/login");
   }
 
   /**
@@ -35,15 +35,15 @@ export class LoginPage {
    */
   async login(email: string, password: string) {
     // Wait for form to be ready
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     // Submit the form by pressing Enter or clicking button
-    await this.signInButton.waitFor({ state: 'visible' });
+    await this.signInButton.waitFor({ state: "visible" });
     // Use Promise.all to wait for navigation
     await Promise.all([
-      this.page.waitForNavigation({ waitUntil: 'networkidle', timeout: 10000 }).catch(() => {}),
-      this.signInButton.click()
+      this.page.waitForNavigation({ waitUntil: "networkidle", timeout: 10000 }).catch(() => {}),
+      this.signInButton.click(),
     ]);
   }
 
@@ -58,7 +58,7 @@ export class LoginPage {
    * Get error message text
    */
   async getErrorMessage(): Promise<string> {
-    return await this.errorMessage.textContent() || '';
+    return (await this.errorMessage.textContent()) || "";
   }
 
   /**
@@ -75,5 +75,3 @@ export class LoginPage {
     await this.resetPasswordLink.click();
   }
 }
-
-

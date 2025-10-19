@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 /**
  * Page Object Model for Flashcards List Page
@@ -16,20 +16,20 @@ export class FlashcardsPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.heading = page.getByTestId('flashcards-heading');
-    this.searchInput = page.getByTestId('flashcards-search-input');
-    this.addButton = page.getByTestId('flashcards-add-button');
-    this.flashcardItems = page.getByTestId('flashcard-item');
-    this.editButtons = page.getByTestId('flashcard-edit-button');
-    this.deleteButtons = page.getByTestId('flashcard-delete-button');
-    this.errorMessage = page.getByTestId('flashcards-error');
+    this.heading = page.getByTestId("flashcards-heading");
+    this.searchInput = page.getByTestId("flashcards-search-input");
+    this.addButton = page.getByTestId("flashcards-add-button");
+    this.flashcardItems = page.getByTestId("flashcard-item");
+    this.editButtons = page.getByTestId("flashcard-edit-button");
+    this.deleteButtons = page.getByTestId("flashcard-delete-button");
+    this.errorMessage = page.getByTestId("flashcards-error");
   }
 
   /**
    * Navigate to flashcards page
    */
   async goto() {
-    await this.page.goto('/flashcards');
+    await this.page.goto("/flashcards");
   }
 
   /**
@@ -58,14 +58,14 @@ export class FlashcardsPage {
   /**
    * Edit flashcard by index
    */
-  async editFlashcard(index: number = 0) {
+  async editFlashcard(index = 0) {
     await this.editButtons.nth(index).click();
   }
 
   /**
    * Delete flashcard by index
    */
-  async deleteFlashcard(index: number = 0) {
+  async deleteFlashcard(index = 0) {
     await this.deleteButtons.nth(index).click();
   }
 
@@ -80,7 +80,6 @@ export class FlashcardsPage {
    * Get error message text
    */
   async getErrorMessage(): Promise<string> {
-    return await this.errorMessage.textContent() || '';
+    return (await this.errorMessage.textContent()) || "";
   }
 }
-

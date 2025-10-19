@@ -17,9 +17,7 @@ export default function EmailVerificationResultPage() {
 
     if (error) {
       setStatus("error");
-      setMessage(
-        errorDescription || "Weryfikacja nie powiodła się. Link mógł wygasnąć lub być nieprawidłowy."
-      );
+      setMessage(errorDescription || "Weryfikacja nie powiodła się. Link mógł wygasnąć lub być nieprawidłowy.");
     } else if (type === "signup") {
       // Check if user is now authenticated
       supabase.auth.getSession().then(({ data: { session } }) => {
@@ -43,12 +41,8 @@ export default function EmailVerificationResultPage() {
       <div className="min-h-screen flex items-center justify-center bg-background px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">
-              Weryfikacja e-mail
-            </h2>
-            <p className="mt-2 text-center text-sm text-muted-foreground">
-              Trwa weryfikacja Twojego adresu e-mail...
-            </p>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">Weryfikacja e-mail</h2>
+            <p className="mt-2 text-center text-sm text-muted-foreground">Trwa weryfikacja Twojego adresu e-mail...</p>
           </div>
         </div>
       </div>

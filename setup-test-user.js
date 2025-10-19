@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * Setup Test User

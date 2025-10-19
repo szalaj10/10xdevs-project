@@ -1,6 +1,6 @@
-import { expect, afterEach, vi } from 'vitest';
-import { cleanup } from '@testing-library/react';
-import '@testing-library/jest-dom/vitest';
+import { expect, afterEach, vi } from "vitest";
+import { cleanup } from "@testing-library/react";
+import "@testing-library/jest-dom/vitest";
 
 // Cleanup after each test case (e.g. clearing jsdom)
 afterEach(() => {
@@ -8,11 +8,11 @@ afterEach(() => {
 });
 
 // Mock environment variables
-vi.stubEnv('PUBLIC_SUPABASE_URL', 'http://127.0.0.1:54321');
-vi.stubEnv('PUBLIC_SUPABASE_KEY', 'test-anon-key');
+vi.stubEnv("PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321");
+vi.stubEnv("PUBLIC_SUPABASE_KEY", "test-anon-key");
 
 // Mock window.matchMedia
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: vi.fn().mockImplementation((query) => ({
     matches: false,
@@ -49,5 +49,3 @@ global.ResizeObserver = class ResizeObserver {
 expect.extend({
   // Add custom matchers here if needed
 });
-
-

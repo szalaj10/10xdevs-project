@@ -52,7 +52,6 @@ jobs:
     permissions:
       contents: read
     env:
-      ENVIRONMENT: integration
       # Secrets expected to be configured for PRs
       PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
       PUBLIC_SUPABASE_KEY: ${{ secrets.PUBLIC_SUPABASE_KEY }}

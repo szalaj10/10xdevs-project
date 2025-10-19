@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 /**
  * Page Object Model for Sessions Page
@@ -19,23 +19,23 @@ export class SessionsPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.startCard = page.getByTestId('session-start-card');
-    this.startButton = page.getByTestId('session-start-button');
-    this.flashcardCard = page.getByTestId('session-flashcard-card');
-    this.revealButton = page.getByTestId('session-reveal-button');
-    this.flashcardBack = page.getByTestId('session-flashcard-back');
-    this.rateHardButton = page.getByTestId('session-rate-hard');
-    this.rateNormalButton = page.getByTestId('session-rate-normal');
-    this.rateEasyButton = page.getByTestId('session-rate-easy');
-    this.progress = page.getByTestId('session-progress');
-    this.errorMessage = page.getByTestId('session-error');
+    this.startCard = page.getByTestId("session-start-card");
+    this.startButton = page.getByTestId("session-start-button");
+    this.flashcardCard = page.getByTestId("session-flashcard-card");
+    this.revealButton = page.getByTestId("session-reveal-button");
+    this.flashcardBack = page.getByTestId("session-flashcard-back");
+    this.rateHardButton = page.getByTestId("session-rate-hard");
+    this.rateNormalButton = page.getByTestId("session-rate-normal");
+    this.rateEasyButton = page.getByTestId("session-rate-easy");
+    this.progress = page.getByTestId("session-progress");
+    this.errorMessage = page.getByTestId("session-error");
   }
 
   /**
    * Navigate to sessions page
    */
   async goto() {
-    await this.page.goto('/sessions');
+    await this.page.goto("/sessions");
   }
 
   /**
@@ -76,15 +76,15 @@ export class SessionsPage {
   /**
    * Complete a flashcard review (reveal + rate)
    */
-  async reviewFlashcard(rating: 'hard' | 'normal' | 'easy' = 'normal') {
+  async reviewFlashcard(rating: "hard" | "normal" | "easy" = "normal") {
     await this.revealAnswer();
     await this.page.waitForTimeout(500); // Wait for animation
 
     switch (rating) {
-      case 'hard':
+      case "hard":
         await this.rateHard();
         break;
-      case 'easy':
+      case "easy":
         await this.rateEasy();
         break;
       default:
@@ -110,7 +110,6 @@ export class SessionsPage {
    * Get error message text
    */
   async getErrorMessage(): Promise<string> {
-    return await this.errorMessage.textContent() || '';
+    return (await this.errorMessage.textContent()) || "";
   }
 }
-

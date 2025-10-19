@@ -108,7 +108,7 @@ test.describe("Authentication Flow", () => {
     test("should access protected route when authenticated", async ({ authenticatedPage, page }) => {
       // Use the authenticated page fixture
       await authenticatedPage;
-      
+
       await page.goto("/flashcards");
 
       // Should stay on flashcards page
@@ -120,7 +120,7 @@ test.describe("Authentication Flow", () => {
     test("should successfully logout", async ({ authenticatedPage, homePage, page }) => {
       // Use the authenticated page fixture
       await authenticatedPage;
-      
+
       await homePage.goto();
 
       await homePage.logout();

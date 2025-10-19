@@ -151,7 +151,11 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormPro
       )}
 
       {successMessage && (
-        <Alert role="status" className="mb-4 border-green-500 bg-green-50 dark:bg-green-950" data-testid="signup-success">
+        <Alert
+          role="status"
+          className="mb-4 border-green-500 bg-green-50 dark:bg-green-950"
+          data-testid="signup-success"
+        >
           <AlertDescription className="text-green-800 dark:text-green-200">{successMessage}</AlertDescription>
         </Alert>
       )}
@@ -236,7 +240,12 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormPro
           </div>
         </div>
 
-        <Button type="submit" className="w-full" disabled={loading || !!successMessage} data-testid="signup-submit-button">
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={loading || !!successMessage}
+          data-testid="signup-submit-button"
+        >
           {loading ? "Rejestracja..." : "Zarejestruj się"}
         </Button>
 

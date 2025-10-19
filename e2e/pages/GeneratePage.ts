@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 /**
  * Page Object Model for Generate Page
@@ -18,22 +18,22 @@ export class GeneratePage {
 
   constructor(page: Page) {
     this.page = page;
-    this.heading = page.getByTestId('generate-heading');
-    this.topicInput = page.getByTestId('generate-topic-input');
-    this.generateButton = page.getByTestId('generate-submit-button');
-    this.errorMessage = page.getByTestId('generate-error');
-    this.candidateCards = page.getByTestId('generate-candidate-card');
-    this.editCandidateButton = page.getByTestId('generate-edit-candidate');
-    this.rejectCandidateButton = page.getByTestId('generate-reject-candidate');
-    this.saveAllButton = page.getByTestId('generate-save-all-button');
-    this.startOverButton = page.getByTestId('generate-start-over-button');
+    this.heading = page.getByTestId("generate-heading");
+    this.topicInput = page.getByTestId("generate-topic-input");
+    this.generateButton = page.getByTestId("generate-submit-button");
+    this.errorMessage = page.getByTestId("generate-error");
+    this.candidateCards = page.getByTestId("generate-candidate-card");
+    this.editCandidateButton = page.getByTestId("generate-edit-candidate");
+    this.rejectCandidateButton = page.getByTestId("generate-reject-candidate");
+    this.saveAllButton = page.getByTestId("generate-save-all-button");
+    this.startOverButton = page.getByTestId("generate-start-over-button");
   }
 
   /**
    * Navigate to generate page
    */
   async goto() {
-    await this.page.goto('/generate/new');
+    await this.page.goto("/generate/new");
   }
 
   /**
@@ -47,7 +47,7 @@ export class GeneratePage {
   /**
    * Wait for candidates to be generated
    */
-  async waitForCandidates(timeout: number = 30000) {
+  async waitForCandidates(timeout = 30000) {
     await this.candidateCards.first().waitFor({ timeout });
   }
 
@@ -61,14 +61,14 @@ export class GeneratePage {
   /**
    * Reject candidate by index
    */
-  async rejectCandidate(index: number = 0) {
+  async rejectCandidate(index = 0) {
     await this.rejectCandidateButton.nth(index).click();
   }
 
   /**
    * Edit candidate by index
    */
-  async editCandidate(index: number = 0) {
+  async editCandidate(index = 0) {
     await this.editCandidateButton.nth(index).click();
   }
 
@@ -97,7 +97,6 @@ export class GeneratePage {
    * Get error message text
    */
   async getErrorMessage(): Promise<string> {
-    return await this.errorMessage.textContent() || '';
+    return (await this.errorMessage.textContent()) || "";
   }
 }
-

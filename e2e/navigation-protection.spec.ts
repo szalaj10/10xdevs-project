@@ -40,6 +40,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should access home page when authenticated", async ({ authenticatedPage, page }) => {
+      await authenticatedPage;
       await page.goto("/");
 
       // Should stay on home page
@@ -48,6 +49,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should access flashcards when authenticated", async ({ authenticatedPage, page }) => {
+      await authenticatedPage;
       await page.goto("/flashcards");
 
       // Should stay on flashcards page
@@ -56,6 +58,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should access generate when authenticated", async ({ authenticatedPage, page }) => {
+      await authenticatedPage;
       await page.goto("/generate/new");
 
       // Should stay on generate page
@@ -64,6 +67,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should access sessions when authenticated", async ({ authenticatedPage, page }) => {
+      await authenticatedPage;
       await page.goto("/sessions");
 
       // Should stay on sessions page
@@ -81,6 +85,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should show logout button when authenticated", async ({ authenticatedPage, navBar, page }) => {
+      await authenticatedPage;
       await page.goto("/");
 
       await expect(navBar.logoutButton).toBeVisible();
@@ -88,6 +93,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should show user email when authenticated", async ({ authenticatedPage, navBar, page }) => {
+      await authenticatedPage;
       await page.goto("/");
 
       await expect(navBar.userEmail).toBeVisible();
@@ -97,6 +103,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should navigate to home via logo", async ({ authenticatedPage, navBar, page }) => {
+      await authenticatedPage;
       await page.goto("/flashcards");
 
       await navBar.goToHome();
@@ -105,6 +112,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should navigate to flashcards via navbar", async ({ authenticatedPage, navBar, page }) => {
+      await authenticatedPage;
       await page.goto("/");
 
       await navBar.goToFlashcards();
@@ -113,6 +121,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should navigate to sessions via navbar", async ({ authenticatedPage, navBar, page }) => {
+      await authenticatedPage;
       await page.goto("/");
 
       await navBar.goToSessions();
@@ -121,6 +130,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should navigate to generate via navbar", async ({ authenticatedPage, navBar, page }) => {
+      await authenticatedPage;
       await page.goto("/");
 
       await navBar.goToGenerate();
@@ -129,6 +139,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should logout successfully", async ({ authenticatedPage, navBar, page }) => {
+      await authenticatedPage;
       await page.goto("/");
 
       await navBar.logout();
@@ -138,6 +149,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should toggle theme", async ({ authenticatedPage, navBar, page }) => {
+      await authenticatedPage;
       await page.goto("/");
 
       // Get initial theme
@@ -179,6 +191,7 @@ test.describe("Navigation and Route Protection", () => {
 
   test.describe("Breadcrumb Navigation", () => {
     test("should navigate between pages in logical flow", async ({ authenticatedPage, page }) => {
+      await authenticatedPage;
       // Start at home
       await page.goto("/");
       await page.waitForLoadState("networkidle");
@@ -230,6 +243,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should handle invalid session IDs", async ({ authenticatedPage, page }) => {
+      await authenticatedPage;
       await page.goto("/sessions/invalid-id-12345");
 
       // Should show error or redirect
@@ -253,6 +267,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should open mobile menu", async ({ authenticatedPage, page }) => {
+      await authenticatedPage;
       // Set mobile viewport
       await page.setViewportSize({ width: 375, height: 667 });
 
@@ -274,6 +289,7 @@ test.describe("Navigation and Route Protection", () => {
 
   test.describe("Back Button Navigation", () => {
     test("should handle browser back button", async ({ authenticatedPage, page }) => {
+      await authenticatedPage;
       await page.goto("/");
       await page.waitForLoadState("networkidle");
       await page.waitForTimeout(1000);
@@ -300,6 +316,7 @@ test.describe("Navigation and Route Protection", () => {
     });
 
     test("should handle browser forward button", async ({ authenticatedPage, page }) => {
+      await authenticatedPage;
       await page.goto("/");
       await page.waitForLoadState("networkidle");
       await page.waitForTimeout(1000);
