@@ -57,8 +57,8 @@ export default function ResetPasswordConfirmPage() {
       setTimeout(() => {
         window.location.href = "/login";
       }, 3000);
-    } catch (e: any) {
-      if (e.message.includes("Auth session missing")) {
+    } catch (e) {
+      if (e instanceof Error && e.message.includes("Auth session missing")) {
         setError("Link wygasł lub jest nieprawidłowy. Wyślij nowy link resetu.");
       } else {
         setError("Błąd aktualizacji hasła. Spróbuj ponownie.");

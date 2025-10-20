@@ -40,8 +40,8 @@ export function useFlashcardsCRUD() {
       const data = await res.json();
       setFlashcards(data.flashcards || []);
       return { flashcards: data.flashcards || [], totalPages: data.pagination?.totalPages || 1 };
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Błąd ładowania fiszek");
       return { flashcards: [], totalPages: 1 };
     } finally {
       setLoading(false);
@@ -75,8 +75,8 @@ export function useFlashcardsCRUD() {
       if (result.warnings) setWarnings(result.warnings);
 
       return result;
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Błąd dodawania fiszki");
       throw e;
     }
   }, []);
@@ -106,8 +106,8 @@ export function useFlashcardsCRUD() {
       const result = await res.json();
       setFlashcards((prev) => prev.map((f) => (f.id === id ? result.flashcard : f)));
       return result.flashcard;
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Błąd edycji fiszki");
       throw e;
     }
   }, []);
@@ -131,8 +131,8 @@ export function useFlashcardsCRUD() {
       if (!res.ok) throw new Error("Błąd usuwania fiszki");
 
       setFlashcards((prev) => prev.filter((f) => f.id !== id));
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Błąd usuwania fiszki");
       throw e;
     }
   }, []);

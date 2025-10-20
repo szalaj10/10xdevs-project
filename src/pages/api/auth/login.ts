@@ -56,8 +56,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
     });
 
     if (error) {
-      console.error("Login error:", error);
-
       // Handle specific Supabase errors
       if (error.message.includes("Invalid login credentials")) {
         return new Response(
@@ -112,8 +110,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         headers: { "Content-Type": "application/json" },
       }
     );
-  } catch (error) {
-    console.error("Unexpected login error:", error);
+  } catch {
     return new Response(
       JSON.stringify({
         code: "INTERNAL_ERROR",

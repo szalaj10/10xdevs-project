@@ -65,20 +65,14 @@ export default function LoginForm({ onSuccess, onSwitchToSignup, onSwitchToReset
     }
 
     try {
-      console.log("[LoginForm] Attempting login...");
-
       // Login directly using Supabase client (browser)
       // This automatically sets cookies for SSR
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      console.log("[LoginForm] Login response:", { data, error: signInError });
-
       if (signInError) {
-        console.error("[LoginForm] Login error:", signInError);
-
         // Handle specific Supabase errors
         if (signInError.message.includes("Invalid login credentials")) {
           setError("Nieprawidłowy e-mail lub hasło");
@@ -92,8 +86,6 @@ export default function LoginForm({ onSuccess, onSwitchToSignup, onSwitchToReset
       }
 
       // Handle successful login
-      console.log("[LoginForm] Login successful, user:", data.user?.email);
-
       if (onSuccess) {
         onSuccess();
       }
@@ -102,12 +94,9 @@ export default function LoginForm({ onSuccess, onSwitchToSignup, onSwitchToReset
       const params = new URLSearchParams(window.location.search);
       const redirectTo = validateRedirectTo(params.get("redirectTo"));
 
-      console.log("[LoginForm] Redirecting to:", redirectTo);
-
       // Use window.location.href for full reload
       window.location.href = redirectTo;
-    } catch (err) {
-      console.error("Login error:", err);
+    } catch {
       setError("Błąd połączenia z serwerem. Spróbuj ponownie.");
       setLoading(false);
     }

@@ -49,8 +49,8 @@ export default function HomePage() {
         const streak = 0;
 
         setStats({ totalFlashcards, dueToday, streak });
-      } catch (e: any) {
-        setError(e.message);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Wystąpił błąd podczas ładowania danych");
       } finally {
         setLoading(false);
       }
@@ -108,15 +108,15 @@ export default function HomePage() {
               title="Rozpocznij naukę"
               description="Sesja powtórek SRS"
               icon="🎯"
-              badge={stats!.dueToday}
+              badge={stats.dueToday}
               onClick={() => (window.location.href = "/sessions")}
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <StatCard label="Twoje fiszki" value={stats!.totalFlashcards} icon="📝" />
-            <StatCard label="Do powtórki dziś" value={stats!.dueToday} icon="⏰" highlight={stats!.dueToday > 0} />
-            <StatCard label="Streak" value={`${stats!.streak} dni`} icon="🔥" />
+            <StatCard label="Twoje fiszki" value={stats.totalFlashcards} icon="📝" />
+            <StatCard label="Do powtórki dziś" value={stats.dueToday} icon="⏰" highlight={stats.dueToday > 0} />
+            <StatCard label="Streak" value={`${stats.streak} dni`} icon="🔥" />
           </div>
         </>
       ) : (

@@ -12,7 +12,6 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
     const { error } = await locals.supabase.auth.signOut();
 
     if (error) {
-      console.error("Logout error:", error);
       return new Response(
         JSON.stringify({
           code: "LOGOUT_ERROR",
@@ -33,8 +32,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
     });
 
     return new Response(null, { status: 204 });
-  } catch (error) {
-    console.error("Unexpected logout error:", error);
+  } catch {
     return new Response(
       JSON.stringify({
         code: "INTERNAL_ERROR",

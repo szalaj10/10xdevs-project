@@ -89,8 +89,6 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormPro
       });
 
       if (signUpError) {
-        console.error("Signup error:", signUpError);
-
         // Handle specific Supabase errors
         if (signUpError.message.includes("User already registered")) {
           setError("Użytkownik o tym adresie e-mail już istnieje. Zaloguj się.");
@@ -124,8 +122,7 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormPro
         // Auto-login after signup (if email confirmation is disabled)
         window.location.href = "/";
       }
-    } catch (err) {
-      console.error("Signup error:", err);
+    } catch {
       setError("Błąd połączenia z serwerem. Spróbuj ponownie.");
     } finally {
       setLoading(false);

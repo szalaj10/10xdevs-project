@@ -36,8 +36,8 @@ export function useSessionStateMachine(sessionId?: string) {
 
       const data: SessionStatsDTO = await res.json();
       setStats(data);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Błąd ładowania statystyk");
     }
   }, []);
 
@@ -79,8 +79,8 @@ export function useSessionStateMachine(sessionId?: string) {
       if (data.session.ended_at) {
         window.location.href = `/sessions/${sessionId}/summary`;
       }
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Błąd ładowania sesji");
     } finally {
       setLoading(false);
     }
@@ -122,8 +122,8 @@ export function useSessionStateMachine(sessionId?: string) {
       setBackRevealed(false);
 
       window.history.pushState({}, "", `/sessions/${data.session.id}`);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Błąd tworzenia sesji");
     } finally {
       setLoading(false);
     }
@@ -169,13 +169,13 @@ export function useSessionStateMachine(sessionId?: string) {
         } else {
           await endSession();
         }
-      } catch (e: any) {
-        setError(e.message);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Błąd oceny fiszki");
       } finally {
         setLoading(false);
       }
     },
-    [session, currentIndex, flashcards]
+    [session, currentIndex, flashcards, endSession]
   );
 
   const endSession = useCallback(async () => {
@@ -199,8 +199,8 @@ export function useSessionStateMachine(sessionId?: string) {
 
       setSessionState("completed");
       window.location.href = `/sessions/${session.id}/summary`;
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Błąd kończenia sesji");
     }
   }, [session]);
 

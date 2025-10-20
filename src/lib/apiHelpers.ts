@@ -90,8 +90,6 @@ export function jsonResponse(data: unknown, status = 200): Response {
  * @returns Response object
  */
 export function handleError(error: unknown): Response {
-  console.error("API Error:", error);
-
   // Handle ApiError with explicit status code
   if (error instanceof ApiError) {
     return errorResponse(error.message, error.statusCode);

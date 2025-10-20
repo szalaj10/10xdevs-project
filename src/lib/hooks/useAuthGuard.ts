@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSupabase } from "./useSupabase";
 
 /**
@@ -10,48 +10,38 @@ export function useAuthGuard(redirectOnAuth = false) {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    let mounted = true;
+  const checkAuth = useCallback(async () => {
+    try {
+      // Prefer SSR state passed via Layout to avoid client-side redirect loops
+      const ssrAuthenticated = (window as { __INITIAL_AUTH_STATE__?: boolean }).__INITIAL_AUTH_STATE__ === true;
 
-    async function checkAuth() {
-      try {
-        // Prefer SSR state passed via Layout to avoid client-side redirect loops
-        const ssrAuthenticated = (window as any).__INITIAL_AUTH_STATE__ === true;
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
+      const hasSession = !!session || ssrAuthenticated;
+      setIsAuthenticated(hasSession);
 
-        if (!mounted) return;
-
-        const hasSession = !!session || ssrAuthenticated;
-        setIsAuthenticated(hasSession);
-
-        if (redirectOnAuth && hasSession) {
-          // Redirect authenticated users away from login page
-          const params = new URLSearchParams(window.location.search);
-          const redirectTo = params.get("redirectTo") || "/";
-          window.location.replace(redirectTo);
-          return;
-        }
-
-        // Do NOT redirect unauthenticated users here; rely on SSR guards
-        // to avoid races. Just finish loading state for client components.
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Auth check error:", error);
-        if (!mounted) return;
-        // Avoid client-side redirects on error to prevent loops
-        setIsLoading(false);
+      if (redirectOnAuth && hasSession) {
+        // Redirect authenticated users away from login page
+        const params = new URLSearchParams(window.location.search);
+        const redirectTo = params.get("redirectTo") || "/";
+        window.location.replace(redirectTo);
+        return;
       }
+
+      // Do NOT redirect unauthenticated users here; rely on SSR guards
+      // to avoid races. Just finish loading state for client components.
+      setIsLoading(false);
+    } catch {
+      // Avoid client-side redirects on error to prevent loops
+      setIsLoading(false);
     }
+  }, [redirectOnAuth, supabase.auth]);
 
+  useEffect(() => {
     checkAuth();
-
-    return () => {
-      mounted = false;
-    };
-  }, [redirectOnAuth]);
+  }, [checkAuth]);
 
   return { isLoading, isAuthenticated };
 }

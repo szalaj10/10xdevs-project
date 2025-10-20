@@ -30,17 +30,6 @@ function isPublicPath(pathname: string): boolean {
 export const onRequest = defineMiddleware(async (context, next) => {
   const { url, redirect } = context;
 
-  // Debug: check if cookies are present on incoming request
-  const incomingCookieHeader = context.request.headers.get("cookie") ?? "";
-  if (incomingCookieHeader) {
-    const hasSupabaseCookie = incomingCookieHeader.includes("sb-");
-    console.log(
-      `[Middleware] Incoming cookies: length=${incomingCookieHeader.length}, hasSupabase=${hasSupabaseCookie}`
-    );
-  } else {
-    console.log("[Middleware] Incoming cookies: none");
-  }
-
   // Create Supabase server client with proper SSR cookie handling
   context.locals.supabase = createSupabaseServerInstance({
     cookies: context.cookies,
@@ -51,9 +40,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const {
     data: { user },
   } = await context.locals.supabase.auth.getUser();
-
-  // Debug logging
-  console.log(`[Middleware] Path: ${url.pathname}, User: ${user ? user.email : "none"}`);
 
   if (user) {
     context.locals.user = {

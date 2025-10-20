@@ -157,8 +157,8 @@ export function useCandidateReview(generationId: string) {
         type: "SET_GENERATION",
         payload: { generation: data.generation, candidates: data.candidate_cards },
       });
-    } catch (e: any) {
-      dispatch({ type: "SET_ERROR", payload: e.message });
+    } catch (e) {
+      dispatch({ type: "SET_ERROR", payload: e instanceof Error ? e.message : "Błąd ładowania generacji" });
     }
   }, [generationId]);
 
@@ -204,8 +204,8 @@ export function useCandidateReview(generationId: string) {
       }
 
       dispatch({ type: "ACCEPT_BULK", payload: state.selectedIds });
-    } catch (e: any) {
-      dispatch({ type: "SET_ERROR", payload: e.message });
+    } catch (e) {
+      dispatch({ type: "SET_ERROR", payload: e instanceof Error ? e.message : "Błąd akceptacji" });
     } finally {
       dispatch({ type: "SET_ACTION_LOADING", payload: false });
     }
@@ -232,8 +232,8 @@ export function useCandidateReview(generationId: string) {
         if (!res.ok) throw new Error("Błąd akceptacji");
 
         dispatch({ type: "ACCEPT_CANDIDATE", payload: candidateId });
-      } catch (e: any) {
-        dispatch({ type: "SET_ERROR", payload: e.message });
+      } catch (e) {
+        dispatch({ type: "SET_ERROR", payload: e instanceof Error ? e.message : "Błąd akceptacji" });
       } finally {
         dispatch({ type: "SET_ACTION_LOADING", payload: false });
       }
@@ -262,8 +262,8 @@ export function useCandidateReview(generationId: string) {
         if (!res.ok) throw new Error("Błąd odrzucenia");
 
         dispatch({ type: "REJECT_CANDIDATE", payload: candidateId });
-      } catch (e: any) {
-        dispatch({ type: "SET_ERROR", payload: e.message });
+      } catch (e) {
+        dispatch({ type: "SET_ERROR", payload: e instanceof Error ? e.message : "Błąd odrzucenia" });
       } finally {
         dispatch({ type: "SET_ACTION_LOADING", payload: false });
       }
@@ -312,8 +312,8 @@ export function useCandidateReview(generationId: string) {
 
         const data = await res.json();
         dispatch({ type: "UPDATE_CANDIDATE", payload: data.candidate_card });
-      } catch (e: any) {
-        dispatch({ type: "SET_ERROR", payload: e.message });
+      } catch (e) {
+        dispatch({ type: "SET_ERROR", payload: e instanceof Error ? e.message : "Błąd edycji" });
       } finally {
         dispatch({ type: "SET_ACTION_LOADING", payload: false });
       }

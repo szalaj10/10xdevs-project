@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
@@ -29,11 +29,7 @@ export default function SessionSummaryPage({ sessionId }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchSession();
-  }, [sessionId]);
-
-  async function fetchSession() {
+  const fetchSession = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -73,18 +69,22 @@ export default function SessionSummaryPage({ sessionId }: Props) {
 
       const calculatedStats = calculateStats(data);
       setStats(calculatedStats);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Wystąpił błąd podczas ładowania sesji");
     } finally {
       setLoading(false);
     }
-  }
+  }, [sessionId]);
+
+  useEffect(() => {
+    fetchSession();
+  }, [fetchSession]);
 
   function calculateStats(data: GetSessionResponseDTO): SessionStatsVM {
     const { session, session_items } = data;
 
     const start = new Date(session.started_at);
-    const end = new Date(session.ended_at!);
+    const end = session.ended_at ? new Date(session.ended_at) : new Date();
     const durationMs = end.getTime() - start.getTime();
     const duration = formatDuration(durationMs);
 

@@ -832,7 +832,7 @@ describe("RulesBuilderService", () => {
 
         vi.mocked(mockSupabase.from).mockReturnValue({
           insert: mockInsert,
-        } as any);
+        } as ReturnType<typeof mockSupabase.from>);
 
         const result = await service.saveRules("user-123", mockRules);
 
@@ -867,7 +867,7 @@ describe("RulesBuilderService", () => {
 
         vi.mocked(mockSupabase.from).mockReturnValue({
           insert: mockInsert,
-        } as any);
+        } as ReturnType<typeof mockSupabase.from>);
 
         await expect(service.saveRules("user-123", mockRules)).rejects.toThrow("Failed to save rules: Database error");
       });
@@ -897,7 +897,7 @@ describe("RulesBuilderService", () => {
 
         vi.mocked(mockSupabase.from).mockReturnValue({
           select: mockSelect,
-        } as any);
+        } as ReturnType<typeof mockSupabase.from>);
 
         const result = await service.getRules("user-123", 456);
 
@@ -920,7 +920,7 @@ describe("RulesBuilderService", () => {
 
         vi.mocked(mockSupabase.from).mockReturnValue({
           select: mockSelect,
-        } as any);
+        } as ReturnType<typeof mockSupabase.from>);
 
         await expect(service.getRules("user-123", 456)).rejects.toThrow("Rules not found");
       });

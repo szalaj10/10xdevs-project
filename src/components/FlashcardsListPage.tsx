@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Skeleton } from "./ui/skeleton";
 import { Alert, AlertDescription } from "./ui/alert";
-import type { FlashcardDTO } from "../types";
+import type { FlashcardDTO, CreateFlashcardDTO, EditFlashcardDTO } from "../types";
 import { useAuthGuard } from "../lib/hooks/useAuthGuard";
 import { useFlashcardsCRUD } from "../lib/hooks/useFlashcardsCRUD";
 
@@ -20,7 +20,7 @@ const DeleteFlashcardDialog = lazy(() =>
   import("./flashcards/DeleteFlashcardDialog").then((m) => ({ default: m.DeleteFlashcardDialog }))
 );
 
-function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
+function debounce<T extends (...args: unknown[]) => unknown>(func: T, wait: number): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
@@ -65,12 +65,12 @@ export default function FlashcardsListPage() {
     setPage(1);
   };
 
-  const handleAdd = async (data: any) => {
+  const handleAdd = async (data: CreateFlashcardDTO) => {
     await addFlashcard(data);
     await fetchFlashcards(search, sort, page);
   };
 
-  const handleEdit = async (id: number, data: any) => {
+  const handleEdit = async (id: number, data: EditFlashcardDTO) => {
     await editFlashcard(id, data);
   };
 

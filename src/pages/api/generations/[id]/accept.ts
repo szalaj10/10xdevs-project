@@ -46,7 +46,6 @@ export const POST: APIRoute = async (context) => {
   // In development without auth, use a mock user ID
   if (!token && import.meta.env.DEV) {
     userId = "0b4e8bb7-ceda-46a0-9760-672b856f2f4a"; // Mock user ID for development
-    console.warn("⚠️  Using mock user ID for development (no authentication)");
   } else if (!token) {
     return new Response(JSON.stringify({ error: "Unauthorized. Please log in." }), {
       status: 401,
@@ -155,7 +154,6 @@ export const POST: APIRoute = async (context) => {
     const { error: updateError } = await supabase.from("candidate_cards").update({ status: "accepted" }).in("id", ids);
 
     if (updateError) {
-      console.error("Failed to update candidate cards status:", updateError);
       // Don't fail the request if status update fails
     }
 
@@ -176,7 +174,6 @@ export const POST: APIRoute = async (context) => {
         .eq("id", generationId);
 
       if (statsError) {
-        console.error("Failed to update generation statistics:", statsError);
         // Don't fail the request if stats update fails
       }
     }
@@ -194,11 +191,6 @@ export const POST: APIRoute = async (context) => {
       }
     );
   } catch (error) {
-    // Log error for debugging (in production, use proper logging service)
-    if (import.meta.env.DEV) {
-      console.error("Accept candidates error:", error);
-    }
-
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : "An unexpected error occurred",

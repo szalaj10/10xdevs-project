@@ -39,8 +39,6 @@ export const POST: APIRoute = async (context) => {
   // In development without auth, use a mock user ID and service role client
   if (!token && import.meta.env.DEV) {
     userId = "0b4e8bb7-ceda-46a0-9760-672b856f2f4a"; // Mock user ID for development
-    console.warn("⚠️  Using mock user ID for development (no authentication)");
-    console.warn("⚠️  Using service role client to bypass RLS in development");
     // Use service role client to bypass RLS when testing without auth
     try {
       supabase = createSupabaseServiceClient();
@@ -118,11 +116,6 @@ export const POST: APIRoute = async (context) => {
       },
     });
   } catch (error) {
-    // Log error for debugging (in production, use proper logging service)
-    if (import.meta.env.DEV) {
-      console.error("Generation error:", error);
-    }
-
     // Return a generic error message to avoid exposing internal details
     return new Response(
       JSON.stringify({

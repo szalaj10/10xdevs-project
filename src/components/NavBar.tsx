@@ -57,24 +57,19 @@ export function NavBar({
   const handleLogout = async () => {
     try {
       // Call server-side logout endpoint for proper cookie cleanup
-      const response = await fetch("/api/auth/logout", {
+      await fetch("/api/auth/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      if (!response.ok) {
-        console.error("Logout failed:", response.statusText);
-      }
-
       // Also sign out on client-side
       await supabase.auth.signOut();
 
       // Force server-side reload to clear session
       window.location.replace("/login");
-    } catch (error) {
-      console.error("Logout error:", error);
+    } catch {
       // Fallback: still try to redirect to login
       window.location.replace("/login");
     }

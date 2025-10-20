@@ -36,11 +36,11 @@ export function formatDuration(durationMs: number): string {
 export function formatRelativeDate(date: Date | string): string {
   const d = typeof date === "string" ? new Date(date) : date;
   const now = new Date();
-  
+
   // Normalize dates to start of day for accurate comparison
   const dateOnly = new Date(d.getFullYear(), d.getMonth(), d.getDate());
   const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  
+
   const diffMs = dateOnly.getTime() - nowOnly.getTime();
   const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
 

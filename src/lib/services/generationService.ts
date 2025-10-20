@@ -90,7 +90,6 @@ Teraz wygeneruj JSON z 5 fiszkami dla tematu: "${topic}"`;
 
     const flashcards = response.data.flashcards;
     if (!flashcards) {
-      console.error("Groq response missing flashcards field. Full response:", JSON.stringify(response.data));
       throw new Error("Groq response missing 'flashcards' field");
     }
 
@@ -153,12 +152,9 @@ async function logGenerationError(
       error_code: errorCode,
       error_message: errorMessage,
     });
-  } catch (logError) {
-    // If logging fails, at least log to console in development
-    if (import.meta.env.DEV) {
-      console.error("Failed to log generation error to database:", logError);
-      console.error("Original error:", error);
-    }
+  } catch {
+    // If logging fails, silently continue (error already occurred)
+    // In production, we don't want to expose internal errors
   }
 }
 
@@ -224,10 +220,8 @@ export async function triggerGeneration(
   let aiCards: AIGeneratedCard[];
   try {
     aiCards = await callGroqAPI(topic);
-    console.log(`✅ Generated ${aiCards.length} flashcards using Groq AI for topic: "${topic}"`);
   } catch (error) {
     // Log the error
-    console.error("Failed to generate flashcards with Groq AI:", error);
     await logGenerationError(supabase, userId, topic, error);
 
     // Rethrow the error instead of falling back to mock data
