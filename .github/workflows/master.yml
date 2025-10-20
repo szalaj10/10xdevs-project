@@ -146,6 +146,14 @@ jobs:
 
       - name: Build project
         run: npm run build
+        env:
+          # These environment variables are required by astro:env during build
+          # They will be properly injected into the Cloudflare Worker
+          PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+          PUBLIC_SUPABASE_KEY: ${{ secrets.PUBLIC_SUPABASE_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: ${{ secrets.GROQ_MODEL }}
+          GROQ_BASE_URL: ${{ secrets.GROQ_BASE_URL }}
 
       - name: Verify build output
         run: |
@@ -218,6 +226,14 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }} --branch=master
+        env:
+          # Environment variables for Cloudflare Pages runtime
+          # These will be available in the deployed worker
+          PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+          PUBLIC_SUPABASE_KEY: ${{ secrets.PUBLIC_SUPABASE_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: ${{ secrets.GROQ_MODEL }}
+          GROQ_BASE_URL: ${{ secrets.GROQ_BASE_URL }}
 
       - name: Deployment summary
         if: success()

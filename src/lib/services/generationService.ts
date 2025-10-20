@@ -141,6 +141,7 @@ async function logGenerationError(
 
   const sourceTextHash = createHash("sha256").update(topic).digest("hex");
   const sourceTextLength = topic.length;
+  // Note: GROQ_MODEL will be injected by astro:env in production
   const modelName = import.meta.env.GROQ_MODEL || "llama-3.3-70b-versatile";
 
   try {
@@ -231,6 +232,7 @@ export async function triggerGeneration(
   // Step 2: Insert generation record
   const sourceTextHash = createHash("sha256").update(topic).digest("hex");
   const sourceTextLength = topic.length;
+  // Note: GROQ_MODEL will be injected by astro:env in production
   const modelName = import.meta.env.GROQ_MODEL || "llama-3.3-70b-versatile";
 
   const { data: generation, error: generationError } = await supabase

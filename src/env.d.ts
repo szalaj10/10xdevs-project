@@ -1,4 +1,5 @@
 /// <reference types="astro/client" />
+/// <reference types="astro/env" />
 
 import type { Database, SupabaseClient } from "./db/supabase.client";
 
@@ -18,17 +19,14 @@ declare global {
   }
 }
 
+// Environment variables are now managed by astro:env
+// Import them using: import { PUBLIC_SUPABASE_URL, GROQ_API_KEY } from 'astro:env/client' or 'astro:env/server'
+// The schema is defined in astro.config.mjs
+
+// Legacy support for test environment variables
 interface ImportMetaEnv {
   readonly SUPABASE_URL: string;
-  readonly SUPABASE_KEY: string;
-  readonly PUBLIC_SUPABASE_URL: string;
-  readonly PUBLIC_SUPABASE_KEY: string;
-  readonly OPENROUTER_API_KEY: string;
-  readonly OPENROUTER_MOCK?: string;
-  readonly GROQ_API_KEY: string;
-  readonly GROQ_MODEL?: string;
-  readonly GROQ_BASE_URL?: string;
-  // more env variables...
+  readonly SUPABASE_PUBLIC_KEY: string;
 }
 
 interface ImportMeta {

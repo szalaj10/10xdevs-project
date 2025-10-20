@@ -400,19 +400,31 @@ export class GroqService {
 /**
  * Create a GroqService instance with environment variables
  *
+ * @param apiKey - Optional API key (if not provided, will use environment variable)
+ * @param model - Optional model (if not provided, will use environment variable or default)
+ * @param baseUrl - Optional base URL (if not provided, will use environment variable)
  * @returns GroqService instance
  * @throws {GroqError} If required environment variables are missing
  */
-export function createGroqService(): GroqService {
-  const apiKey = import.meta.env.GROQ_API_KEY;
+export function createGroqService(
+  apiKey?: string,
+  model?: string,
+  baseUrl?: string
+): GroqService {
+  // Use provided values or fallback to import.meta.env
+  // Note: In production with astro:env, these will be properly injected
+  const finalApiKey = apiKey || import.meta.env.GROQ_API_KEY;
+  const finalModel = model || import.meta.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+  const finalBaseUrl = baseUrl || import.meta.env.GROQ_BASE_URL;
 
-  if (!apiKey) {
+  if (!finalApiKey) {
     throw new GroqError("GROQ_API_KEY environment variable is required");
   }
 
   return new GroqService({
-    apiKey,
-    defaultModel: import.meta.env.GROQ_MODEL || "llama-3.3-70b-versatile",
+    apiKey: finalApiKey,
+    defaultModel: finalModel,
+    baseURL: finalBaseUrl,
     defaultParams: {
       temperature: 0.7,
       maxTokens: 2048,

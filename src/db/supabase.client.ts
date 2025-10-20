@@ -2,12 +2,14 @@ import { createClient } from "@supabase/supabase-js";
 import { createServerClient, type CookieOptionsWithName } from "@supabase/ssr";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { AstroCookies } from "astro";
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_KEY } from "astro:env/client";
+import { SUPABASE_SERVICE_ROLE_KEY } from "astro:env/server";
 
 import type { Database } from "./database.types";
 
-const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_KEY;
-const supabaseServiceKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseUrl = PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = PUBLIC_SUPABASE_KEY;
+const supabaseServiceKey = SUPABASE_SERVICE_ROLE_KEY;
 
 export const cookieOptions: CookieOptionsWithName = {
   path: "/",
