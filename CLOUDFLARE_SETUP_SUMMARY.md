@@ -1,169 +1,103 @@
 # Podsumowanie konfiguracji Cloudflare Pages
 
-## ✅ Zmiany wprowadzone w projekcie
+## ✅ Wykonane zmiany
 
-### 1. Konfiguracja Astro dla Cloudflare
+### 1. Adapter Astro
+- ✅ Zmieniono adapter z `@astrojs/node` na `@astrojs/cloudflare`
+- ✅ Włączono `platformProxy` dla lepszej integracji z Cloudflare Workers
 
-**Plik**: `astro.config.mjs`
+### 2. GitHub Actions Workflow
+- ✅ Utworzono `.github/workflows/master.yml` dla automatycznego deploymentu
+- ✅ Workflow uruchamia się przy push do gałęzi `master`
+- ✅ Zawiera 3 joby: Lint → Unit Tests → Deploy
+- ✅ Używa najnowszych wersji akcji GitHub:
+  - `actions/checkout@v5`
+  - `actions/setup-node@v6`
+  - `actions/upload-artifact@v4`
+  - `cloudflare/wrangler-action@v3`
 
-Zmieniono adapter z `@astrojs/node` na `@astrojs/cloudflare`:
+### 3. Composite Action
+- ✅ Zaktualizowano `.github/actions/node-setup/action.yml`
+- ✅ Zmieniono `actions/setup-node` z v4 na v6
 
-```javascript
-import cloudflare from "@astrojs/cloudflare";
+## 📋 Wymagane akcje użytkownika
 
-export default defineConfig({
-  adapter: cloudflare({
-    platformProxy: {
-      enabled: true,
-    },
-  }),
-});
-```
+### Krok 1: Skonfiguruj sekrety GitHub
 
-### 2. Konfiguracja Cloudflare
+W ustawieniach repozytorium (**Settings** > **Secrets and variables** > **Actions**) dodaj:
 
-**Plik**: `wrangler.toml` (nowy)
+**Cloudflare (wymagane):**
+- `CLOUDFLARE_API_TOKEN` - Token API z uprawnieniami do Cloudflare Pages
+- `CLOUDFLARE_ACCOUNT_ID` - ID konta Cloudflare
+- `CLOUDFLARE_PROJECT_NAME` - Nazwa projektu (np. `10xdevs-flashcards`)
 
-Utworzono plik konfiguracyjny dla Cloudflare Workers/Pages:
+**Supabase (wymagane):**
+- `PUBLIC_SUPABASE_URL` - URL instancji Supabase
+- `PUBLIC_SUPABASE_KEY` - Publiczny klucz API (anon key)
 
-```toml
-name = "10xdevs-project"
-compatibility_date = "2024-01-01"
-pages_build_output_dir = "./dist"
-```
+**GROQ API (wymagane):**
+- `GROQ_API_KEY` - Klucz API GROQ
 
-### 3. CI/CD Workflow dla produkcji
+**GROQ API (opcjonalne):**
+- `GROQ_MODEL` - Model do użycia (domyślnie: `llama-3.3-70b-versatile`)
+- `GROQ_BASE_URL` - Bazowy URL (domyślnie: `https://api.groq.com/openai/v1`)
 
-**Plik**: `.github/workflows/master.yml` (nowy)
+### Krok 2: Skonfiguruj zmienne środowiskowe w Cloudflare Pages
 
-Utworzono workflow dla automatycznego deploymentu na Cloudflare Pages:
+W Cloudflare Dashboard (**Workers & Pages** > Twój projekt > **Settings** > **Environment variables**) dodaj:
 
-- **Trigger**: Push do gałęzi `master` lub ręczne uruchomienie
-- **Kroki**:
-  1. Lint (ESLint)
-  2. Unit Tests (Vitest z coverage)
-  3. Build projektu
-  4. Deploy na Cloudflare Pages
-  5. Status notification
+- `PUBLIC_SUPABASE_URL`
+- `PUBLIC_SUPABASE_KEY`
+- `SUPABASE_URL` (ta sama wartość co PUBLIC_SUPABASE_URL)
+- `SUPABASE_KEY` (ta sama wartość co PUBLIC_SUPABASE_KEY)
+- `GROQ_API_KEY`
+- `GROQ_MODEL` (opcjonalnie)
+- `GROQ_BASE_URL` (opcjonalnie)
 
-**Różnice względem `pull-request.yml`**:
-- ✅ Dodano job `deploy` z integracją Cloudflare
-- ✅ Wykorzystano reusable action `node-setup`
-- ❌ Usunięto E2E testy (aby przyspieszyć deployment)
-- ✅ Dodano status notification
+### Krok 3: Popraw ustawienia Build w Cloudflare Pages (jeśli projekt już istnieje)
 
-### 4. Aktualizacja .gitignore
+Jeśli widziałeś błąd `Missing script: "buil"`:
 
-Dodano wpisy dla plików Cloudflare:
+1. Przejdź do **Settings** > **Builds & deployments**
+2. Zmień **Build command** na: `npm run build`
+3. Upewnij się, że **Build output directory** to: `dist`
+4. Zapisz zmiany
 
-```
-# cloudflare
-.wrangler/
-.dev.vars
-wrangler.toml.backup
-```
+## 🚀 Jak używać
 
-### 5. Dokumentacja
+### Automatyczny deployment
+Po skonfigurowaniu sekretów, każdy push do `master` automatycznie wdroży aplikację.
 
-**Plik**: `CLOUDFLARE_DEPLOYMENT.md` (nowy)
+### Ręczny deployment
+1. Przejdź do zakładki **Actions** w GitHub
+2. Wybierz **Deploy to Cloudflare Pages**
+3. Kliknij **Run workflow** > wybierz `master` > **Run workflow**
 
-Kompletny przewodnik zawierający:
-- Instrukcje konfiguracji początkowej
-- Jak uzyskać Cloudflare credentials
-- Konfiguracja GitHub Secrets
-- Proces wdrożenia (automatyczny i ręczny)
-- Troubleshooting
-- Limity i plany Cloudflare
+## 📚 Pełna dokumentacja
 
-## 🔧 Wymagane kroki konfiguracyjne
+Szczegółowe informacje znajdziesz w pliku: **CLOUDFLARE_DEPLOYMENT_SETUP.md**
 
-### 1. GitHub Secrets
+## ⚠️ Ważne uwagi
 
-Dodaj w **Settings** > **Secrets and variables** > **Actions**:
+1. **Adapter jest już zainstalowany** - `@astrojs/cloudflare` jest w `devDependencies`
+2. **Nie uruchamiaj testów E2E w workflow master.yml** - zgodnie z wymaganiami, tylko lint i unit tests
+3. **Używaj gałęzi `master`** - projekt używa `master` zamiast `main`
+4. **Wszystkie akcje używają najnowszych wersji** - zgodnie z best practices
 
-```
-CLOUDFLARE_API_TOKEN=<your-token>
-CLOUDFLARE_ACCOUNT_ID=<your-account-id>
-CLOUDFLARE_PROJECT_NAME=<your-project-name>
-PUBLIC_SUPABASE_URL=<your-supabase-url>
-PUBLIC_SUPABASE_KEY=<your-supabase-key>
-GROQ_API_KEY=<your-groq-key>
-GROQ_MODEL=llama-3.3-70b-versatile
-GROQ_BASE_URL=https://api.groq.com/openai/v1
-```
+## 🔍 Weryfikacja
 
-### 2. Cloudflare Pages
+Po pierwszym deploymencie sprawdź:
+- ✅ Status workflow w GitHub Actions (powinien być zielony)
+- ✅ Deployment w Cloudflare Dashboard (powinien być "Active")
+- ✅ Aplikacja działa pod URL-em Cloudflare Pages
 
-1. Utwórz projekt w Cloudflare Dashboard
-2. Skonfiguruj zmienne środowiskowe w **Settings** > **Environment variables**
-3. **WAŻNE**: W Cloudflare Dashboard > Settings > Builds and deployments, ustaw:
-   - **Build command**: `npm run build` (nie `npm run buil`)
-   - **Build output directory**: `dist`
-   - **Root directory**: `/` (domyślnie)
+## 🆘 Problemy?
 
-## 📊 Porównanie workflows
+Jeśli coś nie działa, sprawdź:
+1. Czy wszystkie sekrety są poprawnie skonfigurowane
+2. Czy zmienne środowiskowe są ustawione w Cloudflare Pages
+3. Logi w GitHub Actions
+4. Logi w Cloudflare Dashboard
 
-| Aspekt | pull-request.yml | master.yml |
-|--------|------------------|------------|
-| Trigger | PR events | Push do master |
-| Lint | ✅ | ✅ |
-| Unit Tests | ✅ | ✅ |
-| E2E Tests | ✅ (z warunkiem) | ❌ |
-| Deploy | ❌ | ✅ |
-| Komentarz na PR | ✅ | ❌ |
-| Status notification | ✅ | ✅ |
-
-## 🚀 Pierwsze wdrożenie
-
-1. Upewnij się, że wszystkie GitHub Secrets są skonfigurowane
-2. Utwórz projekt w Cloudflare Pages
-3. Push do gałęzi `master`:
-
-```bash
-git add .
-git commit -m "Configure Cloudflare Pages deployment"
-git push origin master
-```
-
-4. Monitoruj deployment w:
-   - GitHub Actions: `https://github.com/<user>/<repo>/actions`
-   - Cloudflare Dashboard: Workers & Pages > Deployments
-
-## 🔍 Weryfikacja buildu
-
-Build został pomyślnie przetestowany lokalnie:
-
-```bash
-npm run build
-# ✅ Build completed successfully
-# Output: dist/ directory with Cloudflare-compatible artifacts
-```
-
-## 📚 Dodatkowe zasoby
-
-- **Szczegółowa dokumentacja**: `CLOUDFLARE_DEPLOYMENT.md`
-- **Workflow PR**: `.github/workflows/pull-request.yml`
-- **Workflow Master**: `.github/workflows/master.yml`
-- **Node Setup Action**: `.github/actions/node-setup/action.yml`
-
-## ⚠️ Znane ostrzeżenia (niegroźne)
-
-Podczas buildu mogą pojawić się następujące ostrzeżenia:
-
-1. **Sessions with Cloudflare KV**: Informacja o automatycznej konfiguracji sesji
-2. **Sharp not supported**: Sugestia użycia `imageService: "compile"` dla optymalizacji obrazów
-3. **Auto-externalized node:crypto**: Automatyczne externalizowanie modułów Node.js
-
-Te ostrzeżenia nie wpływają na działanie aplikacji.
-
-## ✨ Co dalej?
-
-1. Skonfiguruj custom domain w Cloudflare (opcjonalnie)
-2. Ustaw monitoring i alerty
-3. Rozważ konfigurację preview deployments dla PR
-4. Dodaj cache headers dla lepszej wydajności
-
----
-
-**Status**: ✅ Konfiguracja kompletna i gotowa do użycia
+Szczegółowe rozwiązywanie problemów: **CLOUDFLARE_DEPLOYMENT_SETUP.md** → sekcja "Rozwiązywanie problemów"
 

@@ -10,12 +10,11 @@
 2. [Getting Started](#getting-started)  
 3. [Available Scripts](#available-scripts)  
 4. [Testing](#testing)  
-5. [Deployment](#deployment)  
-6. [Project Scope](#project-scope)  
+5. [Project Scope](#project-scope)  
    - [In Scope](#in-scope)  
    - [Out of Scope](#out-of-scope)  
-7. [Project Status](#project-status)  
-8. [License](#license)  
+6. [Project Status](#project-status)  
+7. [License](#license)  
 
 ---
 
@@ -35,13 +34,9 @@
 - **Tooling**  
   - Node.js v22.14.0  
   - ESLint & Prettier (with Husky + lint-staged)  
-  - GitHub Actions (CI/CD)  
+  - GitHub Actions (CI)  
   - Vitest (unit & integration tests)  
-  - Playwright (E2E tests)
-
-- **Hosting & Deployment**  
-  - Cloudflare Pages (SSR + Edge Workers)  
-  - Automatic deployment on push to `master`  
+  - Playwright (E2E tests)  
 
 ---
 
@@ -183,42 +178,6 @@ Current coverage thresholds: **≥70%** for critical modules
 
 ---
 
-## Deployment
-
-The application is configured for automatic deployment to **Cloudflare Pages**.
-
-### Quick Start
-
-🚀 **[5-Minute Quick Start Guide](./CLOUDFLARE_QUICK_START.md)** - Get deployed in 5 minutes
-
-### Documentation
-
-- 📖 [Quick Start Guide](./CLOUDFLARE_QUICK_START.md) - Szybka konfiguracja (5 min)
-- 📚 [Complete Deployment Guide](./CLOUDFLARE_DEPLOYMENT.md) - Pełna dokumentacja
-- 📋 [Setup Summary](./CLOUDFLARE_SETUP_SUMMARY.md) - Podsumowanie zmian
-
-### Deployment Process
-
-Every push to `master` branch automatically:
-1. ✅ Runs linting (ESLint)
-2. ✅ Runs unit tests (Vitest)
-3. ✅ Builds the project for Cloudflare
-4. 🚀 Deploys to Cloudflare Pages
-
-### Required Secrets
-
-Configure these in GitHub Settings > Secrets:
-- `CLOUDFLARE_API_TOKEN`
-- `CLOUDFLARE_ACCOUNT_ID`
-- `CLOUDFLARE_PROJECT_NAME`
-- `PUBLIC_SUPABASE_URL`
-- `PUBLIC_SUPABASE_KEY`
-- `GROQ_API_KEY`
-- `GROQ_MODEL`
-- `GROQ_BASE_URL`
-
----
-
 ## Project Scope
 
 ### In Scope
@@ -248,7 +207,6 @@ Configure these in GitHub Settings > Secrets:
 - ✅ Core flashcard flows implemented  
 - ✅ AI generation & candidate review in progress  
 - ✅ **Testing environment fully configured** (Vitest + Playwright)  
-- ✅ **Cloudflare Pages deployment configured**
 - 🔄 SRS session & analytics upcoming  
 
 ### Testing Status
@@ -257,12 +215,6 @@ Configure these in GitHub Settings > Secrets:
 - ✅ Playwright E2E tests ready
 - ✅ CI/CD pipeline configured
 - 📖 [See Testing Setup Complete](./TESTING_SETUP_COMPLETE.md)
-
-### Deployment Status
-- ✅ Cloudflare Pages adapter configured
-- ✅ CI/CD workflow for automatic deployment
-- ✅ Environment variables setup documented
-- 📖 [See Deployment Guide](./CLOUDFLARE_QUICK_START.md)
 
 Contributions and feedback are welcome!
 
