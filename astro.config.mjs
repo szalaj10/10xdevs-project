@@ -12,7 +12,7 @@ export default defineConfig({
   output: "server",
   integrations: [react(), sitemap()],
   server: { port: 4321 },
-  
+
   // Configure environment variables with astro:env
   // This ensures proper handling in Cloudflare Workers and other serverless environments
   env: {
@@ -28,7 +28,7 @@ export default defineConfig({
         access: "public",
         optional: false,
       }),
-      
+
       // Server-only variables - only accessible on server
       SUPABASE_SERVICE_ROLE_KEY: envField.string({
         context: "server",
@@ -51,7 +51,7 @@ export default defineConfig({
         access: "public",
         optional: true,
       }),
-      
+
       // Test environment variables
       SUPABASE_URL: envField.string({
         context: "server",
@@ -65,7 +65,7 @@ export default defineConfig({
       }),
     },
   },
-  
+
   vite: {
     plugins: [tailwindcss()],
     define: {

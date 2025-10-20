@@ -406,11 +406,7 @@ export class GroqService {
  * @returns GroqService instance
  * @throws {GroqError} If required environment variables are missing
  */
-export function createGroqService(
-  apiKey?: string,
-  model?: string,
-  baseUrl?: string
-): GroqService {
+export function createGroqService(apiKey?: string, model?: string, baseUrl?: string): GroqService {
   // Use provided values or fallback to import.meta.env
   // Note: In production with astro:env, these will be properly injected
   const finalApiKey = apiKey || import.meta.env.GROQ_API_KEY;
