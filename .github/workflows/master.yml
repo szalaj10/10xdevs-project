@@ -66,6 +66,7 @@ jobs:
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       GROQ_MODEL: ${{ secrets.GROQ_MODEL }}
       GROQ_BASE_URL: ${{ secrets.GROQ_BASE_URL }}
+      CLOUDFLARE_PROJECT_NAME: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -73,13 +74,39 @@ jobs:
       - name: Setup Node and install
         uses: ./.github/actions/node-setup
 
+      - name: Check Cloudflare secrets
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "❌ CLOUDFLARE_API_TOKEN is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
+            echo "❌ CLOUDFLARE_ACCOUNT_ID is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.CLOUDFLARE_PROJECT_NAME }}" ]; then
+            echo "❌ CLOUDFLARE_PROJECT_NAME is not set"
+            exit 1
+          fi
+          echo "✅ All Cloudflare secrets are configured"
+
       - name: Build project
         run: npm run build
+
+      - name: Verify build output
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "❌ dist directory does not exist"
+            exit 1
+          fi
+          echo "✅ dist directory exists"
+          echo "📁 Contents of dist:"
+          ls -la dist
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          command: pages deploy dist --project-name=$CLOUDFLARE_PROJECT_NAME
 

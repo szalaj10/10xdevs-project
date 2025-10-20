@@ -93,11 +93,28 @@ Po pierwszym deploymencie sprawdź:
 
 ## 🆘 Problemy?
 
-Jeśli coś nie działa, sprawdź:
-1. Czy wszystkie sekrety są poprawnie skonfigurowane
-2. Czy zmienne środowiskowe są ustawione w Cloudflare Pages
-3. Logi w GitHub Actions
-4. Logi w Cloudflare Dashboard
+### Błąd: "The process '/opt/hostedtoolcache/node/22.14.0/x64/bin/npx' failed with exit code 1"
 
-Szczegółowe rozwiązywanie problemów: **CLOUDFLARE_DEPLOYMENT_SETUP.md** → sekcja "Rozwiązywanie problemów"
+**To oznacza, że deployment się nie powiódł.** Najczęstsze przyczyny:
+
+1. ❌ **Brak sekretów w GitHub** - sprawdź czy wszystkie 3 sekrety Cloudflare są skonfigurowane
+2. ❌ **Niepoprawny CLOUDFLARE_API_TOKEN** - token musi mieć uprawnienia do Cloudflare Pages
+3. ❌ **Niepoprawna nazwa projektu** - użyj tylko małych liter, cyfr i myślników
+4. ❌ **Build się nie powiódł** - sprawdź logi buildu
+
+### Zaktualizowany workflow
+
+Nowy workflow automatycznie sprawdzi:
+- ✅ Czy wszystkie sekrety są skonfigurowane
+- ✅ Czy katalog `dist` został utworzony
+- ✅ Co znajduje się w katalogu `dist`
+
+### Szczegółowe rozwiązywanie problemów
+
+**Przeczytaj:** `CLOUDFLARE_DEPLOYMENT_TROUBLESHOOTING.md` - zawiera:
+- Krok po kroku diagnostykę problemu
+- Jak sprawdzić i naprawić każdy sekret
+- Jak testować deployment lokalnie
+- Checklistę debugowania
+- Najczęstsze błędy i ich rozwiązania
 
