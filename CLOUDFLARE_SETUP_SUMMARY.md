@@ -102,12 +102,16 @@ Po pierwszym deploymencie sprawdź:
 3. ❌ **Niepoprawna nazwa projektu** - użyj tylko małych liter, cyfr i myślników
 4. ❌ **Build się nie powiódł** - sprawdź logi buildu
 
-### Zaktualizowany workflow
+### Zaktualizowany workflow z rozszerzonymi logami
 
-Nowy workflow automatycznie sprawdzi:
-- ✅ Czy wszystkie sekrety są skonfigurowane
+Nowy workflow automatycznie sprawdzi i **pokaże w logach**:
+- ✅ Czy wszystkie sekrety są skonfigurowane (z długością każdego)
 - ✅ Czy katalog `dist` został utworzony
-- ✅ Co znajduje się w katalogu `dist`
+- ✅ Co znajduje się w katalogu `dist` (liczba plików, rozmiar)
+- ✅ Czy są wszystkie krytyczne pliki (_worker.js, _astro)
+- ✅ Dokładne komunikaty o błędach z instrukcjami naprawy
+
+**Przewodnik po logach:** `WORKFLOW_LOGGING_GUIDE.md` ⭐ **PRZECZYTAJ TO!**
 
 ### Szczegółowe rozwiązywanie problemów
 

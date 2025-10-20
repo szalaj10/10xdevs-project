@@ -76,32 +76,146 @@ jobs:
 
       - name: Check Cloudflare secrets
         run: |
+          echo "================================"
+          echo "🔍 CHECKING CLOUDFLARE SECRETS"
+          echo "================================"
+          echo ""
+          
+          MISSING_SECRETS=0
+          
+          echo "1️⃣ Checking CLOUDFLARE_API_TOKEN..."
           if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
-            echo "❌ CLOUDFLARE_API_TOKEN is not set"
-            exit 1
+            echo "   ❌ CLOUDFLARE_API_TOKEN is NOT set"
+            echo "   📝 How to fix:"
+            echo "      - Go to: https://dash.cloudflare.com/profile/api-tokens"
+            echo "      - Create token with 'Cloudflare Pages: Edit' permission"
+            echo "      - Add to GitHub: Settings > Secrets > Actions > New secret"
+            echo "      - Name: CLOUDFLARE_API_TOKEN"
+            MISSING_SECRETS=$((MISSING_SECRETS + 1))
+          else
+            TOKEN_LENGTH=${#CLOUDFLARE_API_TOKEN}
+            echo "   ✅ CLOUDFLARE_API_TOKEN is set (length: $TOKEN_LENGTH characters)"
           fi
+          echo ""
+          
+          echo "2️⃣ Checking CLOUDFLARE_ACCOUNT_ID..."
           if [ -z "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
-            echo "❌ CLOUDFLARE_ACCOUNT_ID is not set"
-            exit 1
+            echo "   ❌ CLOUDFLARE_ACCOUNT_ID is NOT set"
+            echo "   📝 How to fix:"
+            echo "      - Go to: https://dash.cloudflare.com/"
+            echo "      - Find 'Account ID' in right sidebar"
+            echo "      - Add to GitHub: Settings > Secrets > Actions > New secret"
+            echo "      - Name: CLOUDFLARE_ACCOUNT_ID"
+            MISSING_SECRETS=$((MISSING_SECRETS + 1))
+          else
+            ACCOUNT_LENGTH=${#CLOUDFLARE_ACCOUNT_ID}
+            echo "   ✅ CLOUDFLARE_ACCOUNT_ID is set (length: $ACCOUNT_LENGTH characters)"
           fi
+          echo ""
+          
+          echo "3️⃣ Checking CLOUDFLARE_PROJECT_NAME..."
           if [ -z "${{ secrets.CLOUDFLARE_PROJECT_NAME }}" ]; then
-            echo "❌ CLOUDFLARE_PROJECT_NAME is not set"
+            echo "   ❌ CLOUDFLARE_PROJECT_NAME is NOT set"
+            echo "   📝 How to fix:"
+            echo "      - Choose a name (e.g., '10xdevs-flashcards')"
+            echo "      - Only lowercase letters, numbers, and hyphens"
+            echo "      - Add to GitHub: Settings > Secrets > Actions > New secret"
+            echo "      - Name: CLOUDFLARE_PROJECT_NAME"
+            MISSING_SECRETS=$((MISSING_SECRETS + 1))
+          else
+            echo "   ✅ CLOUDFLARE_PROJECT_NAME is set: '$CLOUDFLARE_PROJECT_NAME'"
+          fi
+          echo ""
+          
+          echo "================================"
+          if [ $MISSING_SECRETS -eq 0 ]; then
+            echo "✅ ALL SECRETS ARE CONFIGURED!"
+            echo "================================"
+          else
+            echo "❌ MISSING $MISSING_SECRETS SECRET(S)!"
+            echo "================================"
+            echo ""
+            echo "🔗 Quick link to add secrets:"
+            echo "   https://github.com/${{ github.repository }}/settings/secrets/actions"
+            echo ""
+            echo "📚 Full documentation:"
+            echo "   See CLOUDFLARE_DEPLOYMENT_SETUP.md in your repository"
             exit 1
           fi
-          echo "✅ All Cloudflare secrets are configured"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PROJECT_NAME: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
 
       - name: Build project
         run: npm run build
 
       - name: Verify build output
         run: |
+          echo "================================"
+          echo "🔍 VERIFYING BUILD OUTPUT"
+          echo "================================"
+          echo ""
+          
           if [ ! -d "dist" ]; then
-            echo "❌ dist directory does not exist"
+            echo "❌ ERROR: dist directory does not exist!"
+            echo ""
+            echo "This means the build failed or generated files elsewhere."
+            echo "Check the 'Build project' step above for errors."
             exit 1
           fi
+          
           echo "✅ dist directory exists"
-          echo "📁 Contents of dist:"
-          ls -la dist
+          echo ""
+          
+          # Count files
+          FILE_COUNT=$(find dist -type f | wc -l)
+          DIR_SIZE=$(du -sh dist | cut -f1)
+          
+          echo "📊 Build statistics:"
+          echo "   - Total files: $FILE_COUNT"
+          echo "   - Total size: $DIR_SIZE"
+          echo ""
+          
+          echo "📁 Directory structure:"
+          ls -lah dist/
+          echo ""
+          
+          # Check for critical files
+          echo "🔍 Checking for critical files:"
+          if [ -f "dist/_worker.js" ]; then
+            WORKER_SIZE=$(du -h dist/_worker.js | cut -f1)
+            echo "   ✅ _worker.js found (size: $WORKER_SIZE)"
+          else
+            echo "   ⚠️  _worker.js not found (this is the Cloudflare Worker entry point)"
+          fi
+          
+          if [ -d "dist/_astro" ]; then
+            ASTRO_FILES=$(find dist/_astro -type f | wc -l)
+            echo "   ✅ _astro directory found ($ASTRO_FILES files)"
+          else
+            echo "   ⚠️  _astro directory not found"
+          fi
+          
+          echo ""
+          echo "================================"
+          echo "✅ BUILD VERIFICATION COMPLETE"
+          echo "================================"
+
+      - name: Prepare deployment info
+        run: |
+          echo "================================"
+          echo "🚀 PREPARING CLOUDFLARE DEPLOYMENT"
+          echo "================================"
+          echo ""
+          echo "📦 Project: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}"
+          echo "📁 Directory: dist"
+          echo "🌍 Target: Cloudflare Pages"
+          echo ""
+          echo "Deployment will be available at:"
+          echo "https://${{ secrets.CLOUDFLARE_PROJECT_NAME }}.pages.dev"
+          echo ""
+          echo "================================"
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
@@ -112,4 +226,57 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+
+      - name: Deployment summary
+        if: success()
+        run: |
+          echo ""
+          echo "================================"
+          echo "✅ DEPLOYMENT SUCCESSFUL!"
+          echo "================================"
+          echo ""
+          echo "🎉 Your application has been deployed to Cloudflare Pages!"
+          echo ""
+          echo "🔗 URLs:"
+          echo "   Production: https://${{ secrets.CLOUDFLARE_PROJECT_NAME }}.pages.dev"
+          echo "   Dashboard: https://dash.cloudflare.com/"
+          echo ""
+          echo "📊 Next steps:"
+          echo "   1. Visit your site to verify it works"
+          echo "   2. Check Cloudflare Dashboard for deployment details"
+          echo "   3. Configure custom domain (optional)"
+          echo ""
+          echo "================================"
+
+      - name: Deployment failed
+        if: failure()
+        run: |
+          echo ""
+          echo "================================"
+          echo "❌ DEPLOYMENT FAILED"
+          echo "================================"
+          echo ""
+          echo "Common issues:"
+          echo ""
+          echo "1️⃣ Invalid API Token"
+          echo "   - Check token has 'Cloudflare Pages: Edit' permission"
+          echo "   - Verify token hasn't expired"
+          echo ""
+          echo "2️⃣ Wrong Account ID"
+          echo "   - Must be 32-character hash from Cloudflare Dashboard"
+          echo ""
+          echo "3️⃣ Invalid Project Name"
+          echo "   - Only lowercase letters, numbers, and hyphens allowed"
+          echo "   - Current: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}"
+          echo ""
+          echo "4️⃣ Build output issues"
+          echo "   - Check if dist directory contains valid files"
+          echo ""
+          echo "📚 Full troubleshooting guide:"
+          echo "   See CLOUDFLARE_DEPLOYMENT_TROUBLESHOOTING.md"
+          echo ""
+          echo "🔗 Quick link to secrets:"
+          echo "   https://github.com/${{ github.repository }}/settings/secrets/actions"
+          echo ""
+          echo "================================"
 
