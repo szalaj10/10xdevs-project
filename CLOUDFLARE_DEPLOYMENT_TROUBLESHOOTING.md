@@ -1,5 +1,33 @@
 # Rozwiązywanie problemów z deploymentem Cloudflare Pages
 
+## ⚠️ Błąd: "Project not found" [code: 8000007]
+
+**To jest najczęstszy błąd przy pierwszym deploymencie!**
+
+### Komunikat błędu:
+```
+✘ [ERROR] A request to the Cloudflare API (/accounts/***/pages/projects/***) failed.
+
+  Project not found. The specified project name does not match any of your existing projects. [code: 8000007]
+```
+
+### Przyczyna:
+Projekt Cloudflare Pages **nie istnieje** jeszcze w Twoim koncie Cloudflare. Wrangler nie tworzy automatycznie projektów - musisz utworzyć projekt ręcznie przed pierwszym deploymentem.
+
+### Rozwiązanie:
+**Zobacz szczegółowe instrukcje w pliku: `CLOUDFLARE_PROJECT_CREATION_FIX.md`**
+
+Krótka wersja:
+1. Zaloguj się do [Cloudflare Dashboard](https://dash.cloudflare.com/)
+2. Przejdź do **Workers & Pages**
+3. Kliknij **Create application** > **Pages** > **Upload assets**
+4. Wprowadź nazwę projektu (musi być identyczna z `CLOUDFLARE_PROJECT_NAME` w GitHub Secrets)
+5. Kliknij **Create project**
+6. Skonfiguruj zmienne środowiskowe i KV binding
+7. Uruchom ponownie GitHub Action
+
+---
+
 ## Błąd: "The process '/opt/hostedtoolcache/node/22.14.0/x64/bin/npx' failed with exit code 1"
 
 Ten błąd oznacza, że `wrangler` (narzędzie Cloudflare) nie może wykonać deploymentu. Poniżej znajdziesz kroki diagnostyczne.
@@ -99,7 +127,16 @@ Zaktualizowany workflow automatycznie sprawdzi czy sekrety są skonfigurowane i 
 
 ### Czy projekt musi istnieć?
 
-**NIE!** Jeśli projekt o podanej nazwie nie istnieje w Cloudflare Pages, zostanie automatycznie utworzony podczas pierwszego deploymentu.
+**TAK!** Projekt musi istnieć w Cloudflare Pages **przed** pierwszym deploymentem z GitHub Actions.
+
+**WAŻNE:** Wbrew wcześniejszym informacjom, wrangler **nie tworzy** automatycznie projektu. Musisz utworzyć go ręcznie w Cloudflare Dashboard lub za pomocą Wrangler CLI.
+
+**Jeśli widzisz błąd:**
+```
+Project not found. The specified project name does not match any of your existing projects. [code: 8000007]
+```
+
+**Rozwiązanie:** Zobacz szczegółowe instrukcje w `CLOUDFLARE_PROJECT_CREATION_FIX.md`
 
 ---
 
