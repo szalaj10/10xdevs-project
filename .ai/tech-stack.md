@@ -1,3 +1,7 @@
+### CI/CD i Hosting:
+  - Github Action do tworzenia pipeline'ów CI/CD
+  - Cloudflare Pages jako hosting aplikacji Astro
+
 ### Technologie testowe
 
 - **Testy jednostkowe i integracyjne**

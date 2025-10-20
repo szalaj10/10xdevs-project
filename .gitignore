@@ -37,3 +37,8 @@ playwright/.cache/
 
 # vitest
 .vitest/
+
+# cloudflare
+.wrangler/
+.dev.vars
+wrangler.toml.backup

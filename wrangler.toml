@@ -1,0 +1,13 @@
+# Cloudflare Pages Configuration
+# This file is used for local development with Wrangler
+# Production settings are configured in Cloudflare Dashboard
+
+name = "10xdevs-project"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "./dist"
+
+# Environment variables for local development
+# Production env vars should be set in Cloudflare Dashboard
+[vars]
+# Add non-sensitive environment variables here if needed
+
