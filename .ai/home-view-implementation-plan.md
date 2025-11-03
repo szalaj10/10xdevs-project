@@ -475,3 +475,4 @@ function calculateStreak(sessions: Session[]): number {
 
 
 
+
