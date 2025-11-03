@@ -229,4 +229,3 @@ export function NavBar({
     </nav>
   );
 }
-

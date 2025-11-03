@@ -126,4 +126,3 @@ export function handleError(error: unknown): Response {
 
   return errorResponse("Internal server error", 500);
 }
-
