@@ -9,7 +9,7 @@ The application uses Supabase Auth for user authentication with email/password s
 For development and testing, use the following credentials:
 
 - **Email:** `mszalajko@manufacturo.com`
-- **Password:** `Pracownik123`
+- **Password:** ``
 - **User ID:** `0b4e8bb7-ceda-46a0-9760-672b856f2f4a`
 
 ## Quick Start
