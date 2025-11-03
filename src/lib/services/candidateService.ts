@@ -287,4 +287,3 @@ export async function rejectCandidate(
 
   return updatedCandidate as CandidateCardDTO;
 }
-

@@ -212,5 +212,3 @@ function EmptyState() {
     </div>
   );
 }
-
-
