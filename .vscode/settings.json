@@ -32,4 +32,10 @@
     "typescriptreact",
     "astro"
   ]
+  ,
+  "files.insertFinalNewline": false,
+  "files.trimFinalNewlines": true,
+  "editor.formatOnSave": false,
+  "prettier.requirePragma": true,
+  "prettier.enable": false
 }
