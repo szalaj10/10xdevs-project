@@ -92,3 +92,4 @@ export default function SessionStudyPage({ sessionId }: Props) {
     </main>
   );
 }
+

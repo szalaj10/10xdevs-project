@@ -41,3 +41,4 @@ alter table flashcards
   check (repetitions >= 0);
 
 
+

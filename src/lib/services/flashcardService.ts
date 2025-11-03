@@ -318,3 +318,4 @@ export async function deleteFlashcard(supabase: SupabaseClient, userId: string, 
     throw new Error(`Failed to delete flashcard: ${error.message}`);
   }
 }
+

@@ -686,3 +686,4 @@ try {
 20. Review code, poprawić lintery, commit.
 
 
+

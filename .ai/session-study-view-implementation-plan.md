@@ -622,3 +622,4 @@ try {
 21. Review code, poprawić lintery, commit.
 
 
+

@@ -290,3 +290,4 @@ W przypadku pytań lub niejasności dotyczących planów implementacji:
 - Przejrzyj istniejące implementacje jako wzorzec (np. `generations-view-implementation-plan.md`)
 
 
+

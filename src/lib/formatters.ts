@@ -47,3 +47,4 @@ export function formatRelativeDate(date: Date | string): string {
 
   return formatDate(d);
 }
+

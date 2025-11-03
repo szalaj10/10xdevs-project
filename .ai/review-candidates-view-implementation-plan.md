@@ -490,3 +490,4 @@ try {
 17. Review code, poprawić lintery, commit.
 
 
+

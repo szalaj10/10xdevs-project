@@ -55,3 +55,4 @@ export function useAuthGuard(redirectOnAuth = false) {
 
   return { isLoading, isAuthenticated };
 }
+

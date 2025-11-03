@@ -474,3 +474,4 @@ function calculateStreak(sessions: Session[]): number {
 - Personalizowane wskazówki ("Masz 10 kart do powtórki, zacznij naukę!").
 
 
+
