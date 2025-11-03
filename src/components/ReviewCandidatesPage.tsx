@@ -97,4 +97,3 @@ export default function ReviewCandidatesPage({ generationId }: Props) {
     </main>
   );
 }
-
